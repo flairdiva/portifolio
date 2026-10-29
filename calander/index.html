@@ -17,11 +17,16 @@
             --now-highlight: #ff3366;
         }
 
+        * {
+            box-sizing: border-box;
+        }
+
         html, body {
-            height: 100%;
+            height: 100vh;
+            width: 100vw;
             margin: 0;
             padding: 0;
-            overflow: hidden; /* Prevents outer scrollbars */
+            overflow: hidden;
         }
 
         body {
@@ -29,11 +34,9 @@
             background-color: var(--bg-color);
             color: var(--text-main);
             display: flex;
-            flex-direction: column;
             align-items: center;
             justify-content: center;
-            padding: 10px;
-            box-sizing: border-box;
+            padding: 12px;
             user-select: none;
         }
 
@@ -54,43 +57,46 @@
         .container {
             background: var(--card-bg);
             width: 100%;
-            max-width: 1150px;
-            height: calc(100vh - 20px);
-            padding: 20px;
+            max-width: 940px;
+            height: calc(100vh - 24px);
+            max-height: 900px;
+            padding: 16px 20px;
             border-radius: 20px;
-            box-shadow: 0 15px 35px rgba(255, 133, 162, 0.1);
-            box-sizing: border-box;
+            box-shadow: 0 10px 30px rgba(255, 133, 162, 0.12);
             display: flex;
             flex-direction: column;
+            overflow: hidden;
+            margin: auto;
         }
 
         .header-row {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 10px;
+            margin-bottom: 8px;
             border-bottom: 2px solid var(--light-pink);
-            padding-bottom: 8px;
+            padding-bottom: 6px;
             flex-shrink: 0;
         }
 
         h1 {
             margin: 0;
             color: var(--accent-pink);
-            font-size: 1.5em;
+            font-size: 1.35em;
         }
 
         .tab-buttons {
             display: flex;
-            gap: 10px;
+            gap: 8px;
         }
 
         .tab-btn {
             background: #f0f0f0;
             color: var(--text-main);
             border: none;
-            padding: 6px 14px;
+            padding: 5px 12px;
             border-radius: 20px;
+            font-size: 0.85em;
             font-weight: bold;
             cursor: pointer;
             transition: all 0.2s;
@@ -105,8 +111,9 @@
             background: var(--accent-pink);
             color: white;
             border: none;
-            padding: 6px 14px;
+            padding: 5px 12px;
             border-radius: 20px;
+            font-size: 0.85em;
             font-weight: bold;
             cursor: pointer;
             transition: opacity 0.2s;
@@ -117,19 +124,20 @@
         .auth-card {
             background: var(--bg-color);
             border: 1px solid var(--light-pink);
-            padding: 12px;
-            border-radius: 15px;
-            margin-bottom: 10px;
+            padding: 8px 12px;
+            border-radius: 12px;
+            margin-bottom: 8px;
             display: flex;
             gap: 10px;
             align-items: center;
             justify-content: center;
             flex-wrap: wrap;
             flex-shrink: 0;
+            font-size: 0.85em;
         }
 
         .auth-card input, .admin-box select, .user-table select {
-            padding: 6px;
+            padding: 5px;
             border: 1px solid var(--light-pink);
             border-radius: 8px;
             outline: none;
@@ -142,7 +150,7 @@
             background: #fffcfc;
             border: 1px solid var(--light-pink);
             border-radius: 20px;
-            margin-top: 10px;
+            margin-top: 20px;
         }
 
         .login-gate-box h2 {
@@ -156,8 +164,8 @@
             font-size: 0.9em;
         }
 
-        .tab-content { display: none; height: 100%; flex-direction: column; }
-        .tab-content.active { display: flex; flex: 1; min-height: 0; }
+        .tab-content { display: none; height: 100%; flex-direction: column; flex: 1; min-height: 0; overflow: hidden; }
+        .tab-content.active { display: flex; }
 
         .nav-bar {
             display: flex;
@@ -165,52 +173,53 @@
             align-items: center;
             background: #fffcfc;
             border: 1px solid var(--light-pink);
-            padding: 6px 12px;
+            padding: 5px 10px;
             border-radius: 12px;
-            margin-bottom: 8px;
+            margin-bottom: 6px;
             flex-shrink: 0;
         }
 
         .nav-bar input[type="date"] {
-            padding: 4px 8px;
+            padding: 3px 6px;
             border: 1px solid var(--light-pink);
             border-radius: 8px;
             color: var(--text-main);
             outline: none;
             font-weight: bold;
+            font-size: 0.8em;
         }
 
         .filter-bar {
             background: #fffcfc;
             border: 1px solid var(--light-pink);
-            padding: 6px 12px;
+            padding: 4px 10px;
             border-radius: 12px;
-            margin-bottom: 8px;
+            margin-bottom: 6px;
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 8px;
             flex-wrap: wrap;
             flex-shrink: 0;
         }
 
         .filter-bar-title {
             font-weight: bold;
-            font-size: 0.8em;
+            font-size: 0.75em;
             color: var(--accent-pink);
         }
 
         .filter-users-list {
             display: flex;
-            gap: 10px;
+            gap: 8px;
             align-items: center;
             flex-wrap: wrap;
         }
 
         .filter-user-item {
-            font-size: 0.75em;
+            font-size: 0.7em;
             display: flex;
             align-items: center;
-            gap: 4px;
+            gap: 3px;
             cursor: pointer;
             background: #fff;
             padding: 2px 6px;
@@ -221,20 +230,20 @@
         .week-display {
             font-weight: bold;
             color: var(--accent-pink);
-            font-size: 0.9em;
+            font-size: 0.85em;
         }
 
         .calendar-container {
             display: grid;
-            grid-template-columns: 55px repeat(7, 1fr);
-            grid-template-rows: 28px 1fr;
+            grid-template-columns: 50px repeat(7, 1fr);
+            grid-template-rows: 24px 1fr;
             background: #fffcfc;
             border: 1px solid var(--light-pink);
-            border-radius: 15px;
+            border-radius: 12px;
             overflow: hidden;
             position: relative;
             flex: 1;
-            min-height: 0; /* Important for flex container scaling */
+            min-height: 0;
         }
 
         .day-header, .time-header {
@@ -244,7 +253,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 0.75em;
+            font-size: clamp(0.65rem, 1vh, 0.75rem);
             border-bottom: 1px solid var(--light-pink);
         }
 
@@ -260,7 +269,7 @@
         }
 
         .time-slot-label {
-            font-size: 0.65em;
+            font-size: clamp(0.55rem, 0.9vh, 0.65rem);
             color: var(--sub-text);
             display: flex;
             align-items: center;
@@ -268,6 +277,7 @@
             border-bottom: 1px solid #fceef1;
             border-right: 1px solid var(--light-pink);
             box-sizing: border-box;
+            line-height: 1;
         }
 
         .time-slot-label.current-hour-label {
@@ -290,6 +300,8 @@
         .hour-cell {
             border-bottom: 1px solid #fceef1;
             box-sizing: border-box;
+            position: relative;
+            z-index: 2;
         }
 
         .hour-cell.selecting {
@@ -298,7 +310,7 @@
         }
 
         .hour-cell.current-local-time-cell {
-            background-color: rgba(255, 51, 102, 0.12) !important;
+            background-color: rgba(255, 51, 102, 0.08) !important;
             box-shadow: inset 0 0 0 2px var(--now-highlight);
             position: relative;
         }
@@ -307,12 +319,12 @@
             position: absolute;
             border-radius: 4px;
             color: white;
-            font-size: 0.65em;
+            font-size: clamp(0.55rem, 0.85vh, 0.68rem);
             font-weight: bold;
-            padding: 2px 3px;
+            padding: 1px 3px;
             box-shadow: 0 1px 3px rgba(0,0,0,0.1);
             overflow: hidden;
-            z-index: 2;
+            z-index: 3 !important;
             box-sizing: border-box;
             cursor: pointer;
             display: flex;
@@ -336,7 +348,7 @@
             background-color: var(--accent-teal) !important;
             opacity: 0.85;
             color: white;
-            z-index: 1;
+            z-index: 1 !important;
             cursor: default;
         }
 
@@ -344,29 +356,29 @@
             background-color: #ff9f1c !important;
             opacity: 0.85;
             color: white;
-            z-index: 1;
+            z-index: 1 !important;
             cursor: default;
         }
 
         .admin-box {
             background: #fffcfc;
             border: 1px solid var(--light-pink);
-            padding: 15px;
-            border-radius: 15px;
-            margin-bottom: 15px;
+            padding: 12px;
+            border-radius: 12px;
+            margin-bottom: 10px;
         }
 
         .user-table {
             width: 100%;
             border-collapse: collapse;
-            margin-top: 10px;
+            margin-top: 8px;
         }
 
         .user-table th, .user-table td {
             text-align: left;
-            padding: 8px;
+            padding: 6px;
             border-bottom: 1px solid var(--light-pink);
-            font-size: 0.8em;
+            font-size: 0.75em;
         }
 
         .user-table th {
@@ -375,30 +387,30 @@
 
         .link-input-group {
             display: flex;
-            gap: 5px;
+            gap: 4px;
             align-items: center;
         }
 
         .link-input-group input {
-            padding: 4px;
+            padding: 3px;
             border: 1px solid var(--light-pink);
             border-radius: 6px;
-            font-size: 0.75em;
-            width: 150px;
+            font-size: 0.7em;
+            width: 130px;
             background: #fff;
             color: #555;
         }
 
         .link-input-group button {
-            padding: 3px 8px;
-            font-size: 0.75em;
+            padding: 2px 6px;
+            font-size: 0.7em;
             border-radius: 6px;
         }
 
         .modal-overlay {
             position: fixed;
             top: 0; left: 0; right: 0; bottom: 0;
-            background: rgba(0, 0, 0, 0.3);
+            background: rgba(0, 0, 0, 0.35);
             display: none;
             justify-content: center;
             align-items: center;
@@ -409,68 +421,71 @@
 
         .modal-box {
             background: white;
-            padding: 20px;
-            border-radius: 20px;
+            padding: 18px;
+            border-radius: 16px;
             width: 90%;
             max-width: 380px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
         }
 
-        .modal-box h3 { margin-top: 0; color: var(--accent-pink); }
+        .modal-box h3 { margin-top: 0; color: var(--accent-pink); font-size: 1.1em; }
 
         .form-group {
             display: flex;
             flex-direction: column;
-            margin-bottom: 10px;
+            margin-bottom: 8px;
         }
 
         .form-group label {
-            font-size: 0.75em;
+            font-size: 0.7em;
             color: var(--sub-text);
-            margin-bottom: 3px;
+            margin-bottom: 2px;
         }
 
         .form-group input, .form-group select {
-            padding: 6px;
+            padding: 5px;
             border: 1px solid var(--light-pink);
             border-radius: 8px;
             outline: none;
+            font-size: 0.85em;
         }
 
         .modal-buttons {
             display: flex;
             gap: 8px;
             justify-content: flex-end;
-            margin-top: 12px;
+            margin-top: 10px;
         }
 
         .btn-cancel {
             background: #ccc;
             color: white;
             border: none;
-            padding: 6px 12px;
+            padding: 5px 12px;
             border-radius: 20px;
             cursor: pointer;
+            font-size: 0.8em;
         }
 
         .btn-danger {
             background: #ff4d4d;
             color: white;
             border: none;
-            padding: 6px 12px;
+            padding: 5px 12px;
             border-radius: 20px;
             cursor: pointer;
+            font-size: 0.8em;
         }
 
         .debug-footer {
-            margin-top: 8px;
-            padding: 6px;
+            margin-top: 6px;
+            padding: 3px 6px;
             background: #f8f9fa;
             border: 1px dashed var(--sub-text);
-            border-radius: 8px;
+            border-radius: 6px;
             font-family: monospace;
-            font-size: 0.7em;
-            color: #555;
+            font-size: 0.65em;
+            color: #666;
             text-align: center;
             word-break: break-all;
             flex-shrink: 0;
@@ -485,23 +500,6 @@
         .overflow-list-item:last-child {
             border-bottom: none;
         }
-
-        /* 1. Lift grid lines to z-index level 2 */
-.hour-cell {
-    position: relative;
-    z-index: 2;
-}
-
-/* 2. Edit Mode blocks sit ABOVE grid lines (z-index 3) */
-.event-block {
-    z-index: 3 !important;
-}
-
-/* 3. View Mode blocks sit BELOW grid lines (z-index 1) */
-.view-free,
-.view-busy {
-    z-index: 1 !important;
-}
     </style>
 </head>
 <body>
@@ -530,10 +528,10 @@
     <div class="auth-card" id="editModeAuthCard" style="display: none;">
         <label><b>Current User:</b></label>
         <span id="loggedInUserDisplay" style="font-weight: bold; color: var(--accent-pink);"></span>
-        <button class="btn" id="logoutBtn" style="padding: 3px 10px; font-size: 0.75em; margin-left: 10px; background: #6c757d;">Switch User / Log Out</button>
+        <button class="btn" id="logoutBtn" style="padding: 2px 8px; font-size: 0.75em; margin-left: 10px; background: #6c757d;">Switch User / Log Out</button>
     </div>
 
-    <div id="appContent" style="display: none; height: 100%; flex-direction: column;">
+    <div id="appContent" style="display: none; flex-direction: column; flex: 1; min-height: 0; overflow: hidden;">
         <div class="tab-content active" id="plannerTab">
             <div class="nav-bar" id="mainNavBar">
                 <button class="btn" id="prevWeekBtn">◄ Prev Week</button>
@@ -545,9 +543,9 @@
             <div class="filter-bar" id="viewModeFilterBar">
                 <span class="filter-bar-title">Include Users:</span>
                 <div class="filter-users-list" id="filterUsersList"></div>
-                <div style="margin-left: auto; display: flex; gap: 5px;">
-                    <button class="btn" style="padding: 2px 6px; font-size: 0.7em;" onclick="setAllUserFilters(true)">Select All</button>
-                    <button class="btn" style="padding: 2px 6px; font-size: 0.7em; background: #6c757d;" onclick="setAllUserFilters(false)">Clear All</button>
+                <div style="margin-left: auto; display: flex; gap: 4px;">
+                    <button class="btn" style="padding: 2px 6px; font-size: 0.68em;" onclick="setAllUserFilters(true)">Select All</button>
+                    <button class="btn" style="padding: 2px 6px; font-size: 0.68em; background: #6c757d;" onclick="setAllUserFilters(false)">Clear All</button>
                 </div>
             </div>
 
@@ -641,16 +639,16 @@
         </div>
         <div class="form-group">
             <label>Reason</label>
-            <input type="text" id="eventReason" placeholder="e.g. School, Work">
+            <input type="text" id="eventReason" placeholder="e.g. School, Work, Sleep">
         </div>
         <div style="display: flex; gap: 10px;">
             <div class="form-group" style="flex:1;">
-                <label>Start Hour</label>
-                <input type="number" id="eventStart" min="0" max="23">
+                <label>Start Time</label>
+                <input type="time" id="eventStartTime" value="09:00">
             </div>
             <div class="form-group" style="flex:1;">
-                <label>End Hour</label>
-                <input type="number" id="eventEnd" min="1" max="24">
+                <label>End Time</label>
+                <input type="time" id="eventEndTime" value="10:00">
             </div>
         </div>
         <div class="form-group">
@@ -756,15 +754,28 @@
         return `${String(hour).padStart(2, '0')}:00`;
     }
 
+    function formatTimeStr(hoursVal) {
+        let h = Math.floor(hoursVal);
+        let m = Math.round((hoursVal - h) * 60);
+        if (m === 60) { h++; m = 0; }
+        return `${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}`;
+    }
+
+    function timeStrToHours(timeStr) {
+        if (!timeStr) return 0;
+        const [h, m] = timeStr.split(':').map(Number);
+        return h + (m || 0) / 60;
+    }
+
     function updateDebugInfo() {
         try {
             const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone || "Unknown Timezone";
-            const formatStr = "24-hour Dynamic Grid Layout";
+            const formatStr = "Minute Precision Dynamic Grid Layout";
             const nowIso = new Date().toISOString();
             const localTimeString = new Date().toLocaleString([], { hour12: false });
 
             document.getElementById("debugText").innerHTML = 
-                `<b>Timezone:</b> ${timeZone} | <b>Time Format:</b> ${formatStr} | <b>Local Time:</b> ${localTimeString} | <b>UTC Time:</b> ${nowIso}`;
+                `<b>Timezone:</b> ${timeZone} | <b>Mode:</b> ${formatStr} | <b>Local Time:</b> ${localTimeString}`;
         } catch (err) {
             document.getElementById("debugText").innerText = "Unable to read system timezone options.";
         }
@@ -1135,8 +1146,8 @@
                         </div>
                     </td>
                     <td>
-                        <button class="btn-danger" style="padding:3px 8px; font-size:0.75em; margin-right: 5px;" onclick="deleteAllUserBlocks('${u}')">Delete All Blocks</button>
-                        <button class="btn-danger" style="padding:3px 8px; font-size:0.75em; background: #6c757d;" onclick="deleteUser('${u}')">Delete Account</button>
+                        <button class="btn-danger" style="padding:2px 6px; font-size:0.7em; margin-right: 4px;" onclick="deleteAllUserBlocks('${u}')">Delete All Blocks</button>
+                        <button class="btn-danger" style="padding:2px 6px; font-size:0.7em; background: #6c757d;" onclick="deleteUser('${u}')">Delete Account</button>
                     </td>
                 `;
                 tableBody.appendChild(row);
@@ -1286,14 +1297,14 @@
         document.querySelectorAll(".hour-cell.selecting").forEach(c => c.classList.remove("selecting"));
     }
 
-    function openModalForNew(day, start, end) {
+    function openModalForNew(day, startHour, endHour) {
         if (isProfileMode || !currentUser || !userCanEdit) return;
         document.getElementById("modalTitle").innerText = "Add Block";
         document.getElementById("modalEventId").value = "";
         document.getElementById("modalSeriesId").value = "";
         document.getElementById("eventDay").value = day;
-        document.getElementById("eventStart").value = start;
-        document.getElementById("eventEnd").value = end;
+        document.getElementById("eventStartTime").value = `${String(startHour).padStart(2, '0')}:00`;
+        document.getElementById("eventEndTime").value = `${String(endHour).padStart(2, '0')}:00`;
         document.getElementById("eventReason").value = "";
         document.getElementById("eventRepeat").value = "none";
         document.getElementById("eventUntilDate").value = "";
@@ -1315,25 +1326,32 @@
         const id = document.getElementById("modalEventId").value;
         const day = parseInt(document.getElementById("eventDay").value);
         const reason = document.getElementById("eventReason").value || "Busy";
-        const start = parseInt(document.getElementById("eventStart").value);
-        const end = parseInt(document.getElementById("eventEnd").value);
+        const startTimeVal = document.getElementById("eventStartTime").value;
+        const endTimeVal = document.getElementById("eventEndTime").value;
         const color = document.getElementById("eventColor").value;
         const repeat = document.getElementById("eventRepeat").value;
         const untilDate = document.getElementById("eventUntilDate").value;
 
+        const start = timeStrToHours(startTimeVal);
+        const end = timeStrToHours(endTimeVal);
+
         if (start >= end) {
-            alert("Start hour must be before end hour.");
+            alert("Start time must be before end time.");
             return;
         }
 
         const originDate = new Date(currentMonday);
         originDate.setDate(originDate.getDate() + day);
 
+        const startH = Math.floor(start);
+        const startM = Math.round((start - startH) * 60);
         const startDateUtc = new Date(originDate);
-        startDateUtc.setHours(start, 0, 0, 0);
+        startDateUtc.setHours(startH, startM, 0, 0);
 
+        const endH = Math.floor(end);
+        const endM = Math.round((end - endH) * 60);
         const endDateUtc = new Date(originDate);
-        endDateUtc.setHours(end, 0, 0, 0);
+        endDateUtc.setHours(endH, endM, 0, 0);
 
         const existingEvent = id ? eventsData.find(e => e.id === id) : null;
         const createdDate = existingEvent ? (existingEvent.createdDate || formatDateString(originDate)) : formatDateString(originDate);
@@ -1405,10 +1423,16 @@
         const startUtc = new Date(item.startUtcIso);
         const endUtc = new Date(item.endUtcIso);
 
+        const startHoursVal = startUtc.getHours() + startUtc.getMinutes() / 60;
+        let endHoursVal = endUtc.getHours() + endUtc.getMinutes() / 60;
+        if (endHoursVal === 0 && endUtc.getDate() !== startUtc.getDate()) {
+            endHoursVal = 24;
+        }
+
         return {
             day: (startUtc.getDay() + 6) % 7,
-            start: startUtc.getHours(),
-            end: endUtc.getHours() === 0 && endUtc.getDate() !== startUtc.getDate() ? 24 : endUtc.getHours()
+            start: startHoursVal,
+            end: endHoursVal
         };
     }
 
@@ -1459,7 +1483,7 @@
             div.style.marginBottom = "6px";
             div.innerHTML = `
                 <b>${item.user}</b>: ${item.reason}<br>
-                <small style="color:var(--sub-text);">${formatHourLabel(item.localTimes.start)} - ${formatHourLabel(item.localTimes.end)}</small>
+                <small style="color:var(--sub-text);">${formatTimeStr(item.localTimes.start)} - ${formatTimeStr(item.localTimes.end)}</small>
             `;
 
             if (!isProfileMode && (isAdmin || item.user === currentUser)) {
@@ -1470,8 +1494,8 @@
                     document.getElementById("modalEventId").value = item.id;
                     document.getElementById("modalSeriesId").value = item.seriesId || "";
                     document.getElementById("eventDay").value = item.localTimes.day;
-                    document.getElementById("eventStart").value = item.localTimes.start;
-                    document.getElementById("eventEnd").value = item.localTimes.end;
+                    document.getElementById("eventStartTime").value = formatTimeStr(item.localTimes.start);
+                    document.getElementById("eventEndTime").value = formatTimeStr(item.localTimes.end);
                     document.getElementById("eventReason").value = item.reason;
                     document.getElementById("eventColor").value = item.color;
                     document.getElementById("eventRepeat").value = item.repeat || "none";
@@ -1572,7 +1596,9 @@
                             block.style.left = `calc(${idx * widthPercent}% + 1px)`;
                             block.style.width = `calc(${widthPercent}% - 2px)`;
                             block.style.backgroundColor = item.color;
-                            block.innerHTML = `<span>${item.user}:</span><span>${item.reason}</span>`;
+                            
+                            const timeLabelStr = ` (${formatTimeStr(item.localTimes.start)}-${formatTimeStr(item.localTimes.end)})`;
+                            block.innerHTML = `<span>${item.user}:</span><span>${item.reason}${timeLabelStr}</span>`;
 
                             if (!isProfileMode) {
                                 block.addEventListener("click", (e) => {
@@ -1581,8 +1607,8 @@
                                     document.getElementById("modalEventId").value = item.id;
                                     document.getElementById("modalSeriesId").value = item.seriesId || "";
                                     document.getElementById("eventDay").value = d;
-                                    document.getElementById("eventStart").value = item.localTimes.start;
-                                    document.getElementById("eventEnd").value = item.localTimes.end;
+                                    document.getElementById("eventStartTime").value = formatTimeStr(item.localTimes.start);
+                                    document.getElementById("eventEndTime").value = formatTimeStr(item.localTimes.end);
                                     document.getElementById("eventReason").value = item.reason;
                                     document.getElementById("eventColor").value = item.color;
                                     document.getElementById("eventRepeat").value = item.repeat || "none";
@@ -1603,40 +1629,49 @@
 
             for (let d = 0; d < 7; d++) {
                 const dayCol = document.getElementById(`day-${d}`);
-                let hours = new Array(24).fill(false);
+                
+                // 1440 minutes per day slice
+                let minutes = new Array(1440).fill(false);
 
                 eventsData.forEach(e => {
                     const isUserIncluded = activeUserFilters[e.user] !== false;
 
                     if (isUserIncluded && shouldRenderInCurrentWeek(e, d)) {
                         const localTimes = getLocalDisplayTimes(e, d);
-                        for (let h = localTimes.start; h < localTimes.end; h++) {
-                            if (h >= 0 && h < 24) hours[h] = true;
+                        const startMin = Math.max(0, Math.min(1439, Math.floor(localTimes.start * 60)));
+                        const endMin = Math.max(0, Math.min(1440, Math.floor(localTimes.end * 60)));
+                        
+                        for (let m = startMin; m < endMin; m++) {
+                            minutes[m] = true;
                         }
                     }
                 });
 
-                let currentStatus = hours[0];
-                let startHour = 0;
+                let currentStatus = minutes[0];
+                let startMin = 0;
 
-                for (let h = 1; h <= 24; h++) {
-                    if (h === 24 || hours[h] !== currentStatus) {
+                for (let m = 1; m <= 1440; m++) {
+                    if (m === 1440 || minutes[m] !== currentStatus) {
                         const block = document.createElement("div");
                         block.className = `event-block ${currentStatus ? 'view-busy' : 'view-free'}`;
 
-                        const topPct = (startHour / 24) * 100;
-                        const heightPct = ((h - startHour) / 24) * 100;
+                        const topPct = (startMin / 1440) * 100;
+                        const heightPct = ((m - startMin) / 1440) * 100;
 
                         block.style.top = `${topPct}%`;
                         block.style.height = `${heightPct}%`;
                         block.style.left = `2px`;
                         block.style.width = `calc(100% - 4px)`;
-                        block.innerText = currentStatus ? "BUSY" : "FREE";
+                        
+                        // Only show text if block is tall enough to render nicely
+                        if (heightPct > 2) {
+                            block.innerText = currentStatus ? "BUSY" : "FREE";
+                        }
 
                         dayCol.appendChild(block);
 
-                        startHour = h;
-                        if (h < 24) currentStatus = hours[h];
+                        startMinute = m;
+                        if (m < 1440) currentStatus = minutes[m];
                     }
                 }
             }
