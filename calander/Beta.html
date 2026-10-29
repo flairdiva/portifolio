@@ -1,0 +1,1683 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weekly Schedule Planner</title>
+
+    <style>
+        :root {
+            --bg-color: #fffafa;
+            --card-bg: #ffffff;
+            --accent-pink: #ff85a2;
+            --light-pink: #ffe4e9;
+            --text-main: #4a4a4a;
+            --sub-text: #d1a7b0;
+            --accent-teal: #2ec4b6;
+            --now-highlight: #ff3366;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        html, body {
+            height: 100vh;
+            width: 100vw;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+        }
+
+        body {
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 12px;
+            user-select: none;
+        }
+
+        /* Profile/Embed Mode Optimization */
+        body.is-profile-embed {
+            padding: 0;
+            background-color: transparent;
+        }
+
+        body.is-profile-embed .container {
+            border-radius: 0;
+            box-shadow: none;
+            padding: 10px;
+            height: 100vh;
+            max-width: 100%;
+        }
+
+        .container {
+            background: var(--card-bg);
+            width: 100%;
+            max-width: 940px;
+            height: calc(100vh - 24px);
+            max-height: 900px;
+            padding: 16px 20px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(255, 133, 162, 0.12);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            margin: auto;
+        }
+
+        .header-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+            border-bottom: 2px solid var(--light-pink);
+            padding-bottom: 6px;
+            flex-shrink: 0;
+        }
+
+        h1 {
+            margin: 0;
+            color: var(--accent-pink);
+            font-size: 1.35em;
+        }
+
+        .tab-buttons {
+            display: flex;
+            gap: 8px;
+        }
+
+        .tab-btn {
+            background: #f0f0f0;
+            color: var(--text-main);
+            border: none;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .tab-btn.active {
+            background: var(--accent-pink);
+            color: white;
+        }
+
+        .btn {
+            background: var(--accent-pink);
+            color: white;
+            border: none;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: opacity 0.2s;
+        }
+
+        .btn:hover { opacity: 0.9; }
+
+        .auth-card {
+            background: var(--bg-color);
+            border: 1px solid var(--light-pink);
+            padding: 8px 12px;
+            border-radius: 12px;
+            margin-bottom: 8px;
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            justify-content: center;
+            flex-wrap: wrap;
+            flex-shrink: 0;
+            font-size: 0.85em;
+        }
+
+        .auth-card input, .admin-box select, .user-table select {
+            padding: 5px;
+            border: 1px solid var(--light-pink);
+            border-radius: 8px;
+            outline: none;
+            background: #fff;
+        }
+
+        .login-gate-box {
+            text-align: center;
+            padding: 30px 20px;
+            background: #fffcfc;
+            border: 1px solid var(--light-pink);
+            border-radius: 20px;
+            margin-top: 20px;
+        }
+
+        .login-gate-box h2 {
+            color: var(--accent-pink);
+            margin-bottom: 8px;
+        }
+
+        .login-gate-box p {
+            color: var(--sub-text);
+            margin-bottom: 20px;
+            font-size: 0.9em;
+        }
+
+        .tab-content { display: none; height: 100%; flex-direction: column; flex: 1; min-height: 0; overflow: hidden; }
+        .tab-content.active { display: flex; }
+
+        .nav-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #fffcfc;
+            border: 1px solid var(--light-pink);
+            padding: 5px 10px;
+            border-radius: 12px;
+            margin-bottom: 6px;
+            flex-shrink: 0;
+        }
+
+        .nav-bar input[type="date"] {
+            padding: 3px 6px;
+            border: 1px solid var(--light-pink);
+            border-radius: 8px;
+            color: var(--text-main);
+            outline: none;
+            font-weight: bold;
+            font-size: 0.8em;
+        }
+
+        .filter-bar {
+            background: #fffcfc;
+            border: 1px solid var(--light-pink);
+            padding: 4px 10px;
+            border-radius: 12px;
+            margin-bottom: 6px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
+            flex-shrink: 0;
+        }
+
+        .filter-bar-title {
+            font-weight: bold;
+            font-size: 0.75em;
+            color: var(--accent-pink);
+        }
+
+        .filter-users-list {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .filter-user-item {
+            font-size: 0.7em;
+            display: flex;
+            align-items: center;
+            gap: 3px;
+            cursor: pointer;
+            background: #fff;
+            padding: 2px 6px;
+            border-radius: 6px;
+            border: 1px solid var(--light-pink);
+        }
+
+        .week-display {
+            font-weight: bold;
+            color: var(--accent-pink);
+            font-size: 0.85em;
+        }
+
+        .calendar-container {
+            display: grid;
+            grid-template-columns: 50px repeat(7, 1fr);
+            grid-template-rows: 24px 1fr;
+            background: #fffcfc;
+            border: 1px solid var(--light-pink);
+            border-radius: 12px;
+            overflow: hidden;
+            position: relative;
+            flex: 1;
+            min-height: 0;
+        }
+
+        .day-header, .time-header {
+            background: var(--light-pink);
+            color: var(--accent-pink);
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: clamp(0.65rem, 1vh, 0.75rem);
+            border-bottom: 1px solid var(--light-pink);
+        }
+
+        .day-header.current-day-header {
+            background-color: var(--accent-pink);
+            color: white;
+        }
+
+        .time-column {
+            display: grid;
+            grid-template-rows: repeat(24, 1fr);
+            height: 100%;
+        }
+
+        .time-slot-label {
+            font-size: clamp(0.55rem, 0.9vh, 0.65rem);
+            color: var(--sub-text);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-bottom: 1px solid #fceef1;
+            border-right: 1px solid var(--light-pink);
+            box-sizing: border-box;
+            line-height: 1;
+        }
+
+        .time-slot-label.current-hour-label {
+            background-color: var(--light-pink);
+            color: var(--now-highlight);
+            font-weight: bold;
+        }
+
+        .day-column {
+            display: grid;
+            grid-template-rows: repeat(24, 1fr);
+            position: relative;
+            border-right: 1px solid #fceef1;
+            cursor: pointer;
+            height: 100%;
+        }
+
+        .day-column:last-child { border-right: none; }
+
+        .hour-cell {
+            border-bottom: 1px solid #fceef1;
+            box-sizing: border-box;
+            position: relative;
+            z-index: 2;
+        }
+
+        .hour-cell.selecting {
+            background-color: var(--light-pink);
+            opacity: 0.6;
+        }
+
+        .hour-cell.current-local-time-cell {
+            background-color: rgba(255, 51, 102, 0.08) !important;
+            box-shadow: inset 0 0 0 2px var(--now-highlight);
+            position: relative;
+        }
+
+        .event-block {
+            position: absolute;
+            border-radius: 4px;
+            color: white;
+            font-size: clamp(0.55rem, 0.85vh, 0.68rem);
+            font-weight: bold;
+            padding: 1px 3px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            overflow: hidden;
+            z-index: 3 !important;
+            box-sizing: border-box;
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            word-break: break-word;
+            line-height: 1.1;
+        }
+
+        .event-block.read-only-block {
+            cursor: default !important;
+        }
+
+        .overflow-block {
+            background-color: #4a4a4a !important;
+            color: #ffffff;
+            border: 1px solid #333;
+        }
+
+        .view-free {
+            background-color: var(--accent-teal) !important;
+            opacity: 0.85;
+            color: white;
+            z-index: 1 !important;
+            cursor: default;
+        }
+
+        .view-busy {
+            background-color: #ff9f1c !important;
+            opacity: 0.85;
+            color: white;
+            z-index: 1 !important;
+            cursor: default;
+        }
+
+        .admin-box {
+            background: #fffcfc;
+            border: 1px solid var(--light-pink);
+            padding: 12px;
+            border-radius: 12px;
+            margin-bottom: 10px;
+        }
+
+        .user-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 8px;
+        }
+
+        .user-table th, .user-table td {
+            text-align: left;
+            padding: 6px;
+            border-bottom: 1px solid var(--light-pink);
+            font-size: 0.75em;
+        }
+
+        .user-table th {
+            color: var(--accent-pink);
+        }
+
+        .link-input-group {
+            display: flex;
+            gap: 4px;
+            align-items: center;
+        }
+
+        .link-input-group input {
+            padding: 3px;
+            border: 1px solid var(--light-pink);
+            border-radius: 6px;
+            font-size: 0.7em;
+            width: 130px;
+            background: #fff;
+            color: #555;
+        }
+
+        .link-input-group button {
+            padding: 2px 6px;
+            font-size: 0.7em;
+            border-radius: 6px;
+        }
+
+        .modal-overlay {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0, 0, 0, 0.35);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 100;
+        }
+
+        .modal-overlay.active { display: flex; }
+
+        .modal-box {
+            background: white;
+            padding: 18px;
+            border-radius: 16px;
+            width: 90%;
+            max-width: 380px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+        }
+
+        .modal-box h3 { margin-top: 0; color: var(--accent-pink); font-size: 1.1em; }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            margin-bottom: 8px;
+        }
+
+        .form-group label {
+            font-size: 0.7em;
+            color: var(--sub-text);
+            margin-bottom: 2px;
+        }
+
+        .form-group input, .form-group select {
+            padding: 5px;
+            border: 1px solid var(--light-pink);
+            border-radius: 8px;
+            outline: none;
+            font-size: 0.85em;
+        }
+
+        .modal-buttons {
+            display: flex;
+            gap: 8px;
+            justify-content: flex-end;
+            margin-top: 10px;
+        }
+
+        .btn-cancel {
+            background: #ccc;
+            color: white;
+            border: none;
+            padding: 5px 12px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 0.8em;
+        }
+
+        .btn-danger {
+            background: #ff4d4d;
+            color: white;
+            border: none;
+            padding: 5px 12px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 0.8em;
+        }
+
+        .debug-footer {
+            margin-top: 6px;
+            padding: 3px 6px;
+            background: #f8f9fa;
+            border: 1px dashed var(--sub-text);
+            border-radius: 6px;
+            font-family: monospace;
+            font-size: 0.65em;
+            color: #666;
+            text-align: center;
+            word-break: break-all;
+            flex-shrink: 0;
+        }
+
+        .overflow-list-item {
+            padding: 6px;
+            border-bottom: 1px solid var(--light-pink);
+            font-size: 0.8em;
+        }
+
+        .overflow-list-item:last-child {
+            border-bottom: none;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="header-row" id="headerRow">
+        <h1>Weekly Planner</h1>
+        <div class="tab-buttons">
+            <button class="tab-btn active" id="tabPlannerBtn" style="display:none;">Calendar</button>
+            <button class="tab-btn" id="tabUsersBtn" style="display:none;">User Management</button>
+            <button class="btn" id="modeBtn" style="display:none;">Switch to Edit Mode</button>
+        </div>
+    </div>
+
+    <div id="loginGate" class="login-gate-box">
+        <h2>Welcome to Weekly Planner</h2>
+        <p>Please log in with your account to view or edit the calendar.</p>
+        <div class="auth-card" style="border:none; margin:0;">
+            <input type="text" id="usernameInputGate" placeholder="Username">
+            <input type="password" id="pinInputGate" placeholder="4-Digit PIN" maxlength="4" style="width: 90px;">
+            <button class="btn" id="loginBtnGate">Log In</button>
+        </div>
+        <span id="authStatusGate" style="font-size: 0.8em; color: var(--accent-pink); margin-top: 8px; display: block;"></span>
+    </div>
+
+    <div class="auth-card" id="editModeAuthCard" style="display: none;">
+        <label><b>Current User:</b></label>
+        <span id="loggedInUserDisplay" style="font-weight: bold; color: var(--accent-pink);"></span>
+        <button class="btn" id="logoutBtn" style="padding: 2px 8px; font-size: 0.75em; margin-left: 10px; background: #6c757d;">Switch User / Log Out</button>
+    </div>
+
+    <div id="appContent" style="display: none; flex-direction: column; flex: 1; min-height: 0; overflow: hidden;">
+        <div class="tab-content active" id="plannerTab">
+            <div class="nav-bar" id="mainNavBar">
+                <button class="btn" id="prevWeekBtn">◄ Prev Week</button>
+                <span class="week-display" id="weekDisplayLabel"></span>
+                <input type="date" id="datePicker">
+                <button class="btn" id="nextWeekBtn">Next Week ►</button>
+            </div>
+
+            <div class="filter-bar" id="viewModeFilterBar">
+                <span class="filter-bar-title">Include Users:</span>
+                <div class="filter-users-list" id="filterUsersList"></div>
+                <div style="margin-left: auto; display: flex; gap: 4px;">
+                    <button class="btn" style="padding: 2px 6px; font-size: 0.68em;" onclick="setAllUserFilters(true)">Select All</button>
+                    <button class="btn" style="padding: 2px 6px; font-size: 0.68em; background: #6c757d;" onclick="setAllUserFilters(false)">Clear All</button>
+                </div>
+            </div>
+
+            <div class="calendar-container" id="calendarContainer">
+                <div class="time-header"></div>
+                <div class="day-header" id="dh-0">Mon</div>
+                <div class="day-header" id="dh-1">Tue</div>
+                <div class="day-header" id="dh-2">Wed</div>
+                <div class="day-header" id="dh-3">Thu</div>
+                <div class="day-header" id="dh-4">Fri</div>
+                <div class="day-header" id="dh-5">Sat</div>
+                <div class="day-header" id="dh-6">Sun</div>
+
+                <div class="time-column" id="timeColumn"></div>
+
+                <div class="day-column" data-day="0" id="day-0"></div>
+                <div class="day-column" data-day="1" id="day-1"></div>
+                <div class="day-column" data-day="2" id="day-2"></div>
+                <div class="day-column" data-day="3" id="day-3"></div>
+                <div class="day-column" data-day="4" id="day-4"></div>
+                <div class="day-column" data-day="5" id="day-5"></div>
+                <div class="day-column" data-day="6" id="day-6"></div>
+            </div>
+        </div>
+
+        <div class="tab-content" id="usersTab" style="overflow-y: auto;">
+            <div class="admin-box">
+                <h3 style="margin-top:0; color: var(--accent-pink);">Add New User</h3>
+                <div style="display:flex; gap:10px; align-items:center; flex-wrap:wrap;">
+                    <input type="text" id="newUsername" placeholder="Username">
+                    <input type="password" id="newPin" placeholder="4-Digit PIN" maxlength="4" style="width: 90px;">
+                    <label style="font-size:0.8em;">
+                        <input type="checkbox" id="newCanEdit" checked onchange="updateNewUserLandingOptions()"> Can Edit?
+                    </label>
+                    <label style="font-size:0.8em;">
+                        <input type="checkbox" id="newIsAdmin" onchange="updateNewUserLandingOptions()"> Admin Access?
+                    </label>
+                    <select id="newLandingPage">
+                        <option value="view">View page</option>
+                        <option value="edit">Edit page</option>
+                        <option value="users" disabled>User management</option>
+                    </select>
+                    <button class="btn" id="createUserBtn">Add User</button>
+                </div>
+                <span id="addUserStatus" style="font-size: 0.8em; color: var(--accent-pink); margin-top: 5px; display: block;"></span>
+            </div>
+
+            <div class="admin-box">
+                <h3 style="margin-top:0; color: var(--accent-pink);">Existing Accounts</h3>
+                <table class="user-table">
+                    <thead>
+                        <tr>
+                            <th>Username</th>
+                            <th>PIN</th>
+                            <th>Role</th>
+                            <th>Can Edit?</th>
+                            <th>URL Landing Page</th>
+                            <th>Direct Login Link</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="userTableBody">
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div class="debug-footer" id="debugFooter">
+        🛠️ <b>DEBUG INFO:</b> <span id="debugText">Detecting system parameters...</span>
+    </div>
+</div>
+
+<div class="modal-overlay" id="eventModal">
+    <div class="modal-box">
+        <h3 id="modalTitle">Add Block</h3>
+        <input type="hidden" id="modalEventId">
+        <input type="hidden" id="modalSeriesId">
+        
+        <div class="form-group">
+            <label>Day</label>
+            <select id="eventDay">
+                <option value="0">Monday</option>
+                <option value="1">Tuesday</option>
+                <option value="2">Wednesday</option>
+                <option value="3">Thursday</option>
+                <option value="4">Friday</option>
+                <option value="5">Saturday</option>
+                <option value="6">Sunday</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label>Reason</label>
+            <input type="text" id="eventReason" placeholder="e.g. School, Work, Sleep">
+        </div>
+        <div style="display: flex; gap: 10px;">
+            <div class="form-group" style="flex:1;">
+                <label>Start Time</label>
+                <input type="time" id="eventStartTime" value="09:00">
+            </div>
+            <div class="form-group" style="flex:1;">
+                <label>End Time</label>
+                <input type="time" id="eventEndTime" value="10:00">
+            </div>
+        </div>
+        <div class="form-group">
+            <label>Repeat</label>
+            <select id="eventRepeat">
+                <option value="none">Does not repeat</option>
+                <option value="weekly">Weekly</option>
+                <option value="monthly">Monthly</option>
+                <option value="annually">Annually</option>
+            </select>
+        </div>
+        <div class="form-group" id="untilDateGroup">
+            <label>Repeat Until Date (Optional)</label>
+            <input type="date" id="eventUntilDate">
+        </div>
+        <div class="form-group">
+            <label>Block Color</label>
+            <input type="color" id="eventColor" value="#ff85a2">
+        </div>
+
+        <div class="modal-buttons">
+            <button class="btn-cancel" onclick="closeModal()">Cancel</button>
+            <button class="btn-danger" id="deleteBtn" style="display:none;" onclick="promptDelete()">Delete</button>
+            <button class="btn" id="saveEventBtn">Save Block</button>
+        </div>
+    </div>
+</div>
+
+<div class="modal-overlay" id="overflowModal">
+    <div class="modal-box">
+        <h3>Overlapping Events</h3>
+        <div id="overflowList" style="max-height:200px; overflow-y:auto; margin-bottom:12px;"></div>
+        <div class="modal-buttons">
+            <button class="btn-cancel" onclick="closeOverflowModal()">Close</button>
+        </div>
+    </div>
+</div>
+
+<div class="modal-overlay" id="deleteModal">
+    <div class="modal-box">
+        <h3>Delete Repeating Block</h3>
+        <p style="font-size:0.8em; color:var(--text-main);">How would you like to delete this repeating event?</p>
+        <div style="display:flex; flex-direction:column; gap:8px; margin-top:12px;">
+            <button class="btn-danger" onclick="confirmDelete('single')">Delete only this block</button>
+            <button class="btn-danger" onclick="confirmDelete('future')">Delete this and all future blocks</button>
+            <button class="btn-danger" onclick="confirmDelete('all')">Delete all blocks in series</button>
+            <button class="btn-cancel" onclick="closeDeleteModal()">Cancel</button>
+        </div>
+    </div>
+</div>
+
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.17.1/firebase-app.js";
+    import { getDatabase, ref, set, get, push, remove, onValue } from "https://www.gstatic.com/firebasejs/12.17.1/firebase-database.js";
+
+    const firebaseConfig = {
+        apiKey: "AIzaSyCJYlwrrbiXJQXo93jbdpBYebtgTMV5gzU",
+        authDomain: "flairdiva-7399b.firebaseapp.com",
+        databaseURL: "https://flairdiva-7399b-default-rtdb.europe-west1.firebasedatabase.app",
+        projectId: "flairdiva-7399b",
+        storageBucket: "flairdiva-7399b.firebasestorage.app",
+        messagingSenderId: "1085061640229",
+        appId: "1:1085061640229:web:2f467befddb5baa79c0fcc",
+        measurementId: "G-C41JE498XQ"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getDatabase(app);
+
+    let currentUser = null;
+    let isAdmin = false;
+    let userCanEdit = true;
+    let isEditMode = false;
+    let isProfileMode = false;
+    let profileTargetUser = null;
+
+    let eventsData = [];
+    let usersList = [];
+    let usersDataMap = {};
+    let activeUserFilters = {};
+
+    let currentMonday = getMonday(new Date());
+
+    let isDragging = false;
+    let dragStartHour = null;
+    let dragEndHour = null;
+    let dragDay = null;
+
+    const tabPlannerBtn = document.getElementById("tabPlannerBtn");
+    const tabUsersBtn = document.getElementById("tabUsersBtn");
+    const plannerTab = document.getElementById("plannerTab");
+    const usersTab = document.getElementById("usersTab");
+    const modeBtn = document.getElementById("modeBtn");
+    const loginGate = document.getElementById("loginGate");
+    const appContent = document.getElementById("appContent");
+    const editModeAuthCard = document.getElementById("editModeAuthCard");
+    const viewModeFilterBar = document.getElementById("viewModeFilterBar");
+    const headerRow = document.getElementById("headerRow");
+    const debugFooter = document.getElementById("debugFooter");
+    const mainNavBar = document.getElementById("mainNavBar");
+
+    function formatHourLabel(hour) {
+        return `${String(hour).padStart(2, '0')}:00`;
+    }
+
+    function formatTimeStr(hoursVal) {
+        let h = Math.floor(hoursVal);
+        let m = Math.round((hoursVal - h) * 60);
+        if (m === 60) { h++; m = 0; }
+        return `${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}`;
+    }
+
+    function timeStrToHours(timeStr) {
+        if (!timeStr) return 0;
+        const [h, m] = timeStr.split(':').map(Number);
+        return h + (m || 0) / 60;
+    }
+
+    function updateDebugInfo() {
+        try {
+            const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone || "Unknown Timezone";
+            const formatStr = "Minute Precision Dynamic Grid Layout";
+            const nowIso = new Date().toISOString();
+            const localTimeString = new Date().toLocaleString([], { hour12: false });
+
+            document.getElementById("debugText").innerHTML = 
+                `<b>Timezone:</b> ${timeZone} | <b>Mode:</b> ${formatStr} | <b>Local Time:</b> ${localTimeString}`;
+        } catch (err) {
+            document.getElementById("debugText").innerText = "Unable to read system timezone options.";
+        }
+    }
+
+    function switchToPlannerView(editState = false) {
+        tabPlannerBtn.classList.add("active");
+        tabUsersBtn.classList.remove("active");
+        plannerTab.classList.add("active");
+        usersTab.classList.remove("active");
+        
+        isEditMode = editState && userCanEdit;
+        modeBtn.style.display = (userCanEdit && !isProfileMode) ? "inline-block" : "none";
+        modeBtn.innerText = isEditMode ? "Switch to View Mode" : "Switch to Edit Mode";
+
+        updateEditAuthCardVisibility();
+        renderEvents();
+    }
+
+    function switchToUsersView() {
+        tabUsersBtn.classList.add("active");
+        tabPlannerBtn.classList.remove("active");
+        usersTab.classList.add("active");
+        plannerTab.classList.remove("active");
+        
+        modeBtn.style.display = "none";
+        editModeAuthCard.style.display = "none";
+    }
+
+    tabPlannerBtn.addEventListener("click", () => switchToPlannerView(isEditMode));
+    tabUsersBtn.addEventListener("click", () => switchToUsersView());
+
+    function getMonday(d) {
+        const date = new Date(d);
+        const day = date.getDay();
+        const diff = date.getDate() - day + (day === 0 ? -6 : 1);
+        const mon = new Date(date.setDate(diff));
+        mon.setHours(0,0,0,0);
+        return mon;
+    }
+
+    function formatDateString(d) {
+        const year = d.getFullYear();
+        const month = String(d.getMonth() + 1).padStart(2, '0');
+        const day = String(d.getDate()).padStart(2, '0');
+        return `${year}-${month}-${day}`;
+    }
+
+    function initCalendar() {
+        const timeCol = document.getElementById("timeColumn");
+        timeCol.innerHTML = "";
+        for (let i = 0; i < 24; i++) {
+            const timeLabel = document.createElement("div");
+            timeLabel.className = "time-slot-label";
+            timeLabel.id = `time-slot-${i}`;
+            timeLabel.innerText = formatHourLabel(i);
+            timeCol.appendChild(timeLabel);
+        }
+
+        for (let d = 0; d < 7; d++) {
+            const dayCol = document.getElementById(`day-${d}`);
+            dayCol.innerHTML = "";
+            for (let h = 0; h < 24; h++) {
+                const cell = document.createElement("div");
+                cell.className = "hour-cell";
+                cell.dataset.hour = h;
+
+                cell.addEventListener("mousedown", () => handleMouseDown(d, h));
+                cell.addEventListener("mouseenter", () => handleMouseEnter(d, h));
+                cell.addEventListener("mouseup", () => handleMouseUp(d, h));
+
+                dayCol.appendChild(cell);
+            }
+        }
+        updateHeaderDates();
+        highlightCurrentTimeSlot();
+        updateDebugInfo();
+    }
+
+    function updateHeaderDates() {
+        const dayNames = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
+        const sunday = new Date(currentMonday);
+        sunday.setDate(sunday.getDate() + 6);
+
+        document.getElementById("weekDisplayLabel").innerText = 
+            `${currentMonday.toLocaleDateString()} - ${sunday.toLocaleDateString()}`;
+
+        for (let i = 0; i < 7; i++) {
+            const d = new Date(currentMonday);
+            d.setDate(d.getDate() + i);
+            const headerElem = document.getElementById(`dh-${i}`);
+            headerElem.innerText = `${dayNames[i]} ${d.getDate()}/${d.getMonth()+1}`;
+        }
+    }
+
+    function highlightCurrentTimeSlot() {
+        document.querySelectorAll('.current-local-time-cell').forEach(el => el.classList.remove('current-local-time-cell'));
+        document.querySelectorAll('.current-hour-label').forEach(el => el.classList.remove('current-hour-label'));
+        document.querySelectorAll('.current-day-header').forEach(el => el.classList.remove('current-day-header'));
+
+        const now = new Date();
+        const currentHour = now.getHours();
+        
+        const hourLabel = document.getElementById(`time-slot-${currentHour}`);
+        if (hourLabel) hourLabel.classList.add('current-hour-label');
+
+        const todayMonday = getMonday(now);
+        if (todayMonday.getTime() === currentMonday.getTime()) {
+            const dayIndex = (now.getDay() + 6) % 7;
+            
+            const header = document.getElementById(`dh-${dayIndex}`);
+            if (header) header.classList.add('current-day-header');
+
+            const cell = document.querySelector(`#day-${dayIndex} [data-hour="${currentHour}"]`);
+            if (cell) cell.classList.add('current-local-time-cell');
+        }
+    }
+
+    setInterval(() => {
+        highlightCurrentTimeSlot();
+        updateDebugInfo();
+    }, 60000);
+
+    initCalendar();
+
+    document.getElementById("prevWeekBtn").addEventListener("click", () => {
+        currentMonday.setDate(currentMonday.getDate() - 7);
+        updateHeaderDates();
+        highlightCurrentTimeSlot();
+        renderEvents();
+    });
+
+    document.getElementById("nextWeekBtn").addEventListener("click", () => {
+        currentMonday.setDate(currentMonday.getDate() + 7);
+        updateHeaderDates();
+        highlightCurrentTimeSlot();
+        renderEvents();
+    });
+
+    document.getElementById("datePicker").addEventListener("change", (e) => {
+        if (!e.target.value) return;
+        const [y, m, d] = e.target.value.split('-');
+        currentMonday = getMonday(new Date(y, m - 1, d));
+        updateHeaderDates();
+        highlightCurrentTimeSlot();
+        renderEvents();
+    });
+
+    function performLogin(name, pin, statusElement) {
+        if (!name || pin.length !== 4) {
+            if (statusElement) statusElement.innerText = "Enter username & 4-digit PIN";
+            return;
+        }
+
+        const userRef = ref(db, `users/${name}`);
+        get(userRef).then((snapshot) => {
+            if (snapshot.exists()) {
+                const data = snapshot.val();
+                if (String(data.pin).trim() === String(pin).trim()) {
+                    currentUser = name;
+                    isAdmin = data.admin === true || data.admin === "true";
+                    userCanEdit = data.canEdit !== undefined ? (data.canEdit === true || data.canEdit === "true") : true;
+
+                    loginGate.style.display = "none";
+                    appContent.style.display = "flex";
+
+                    tabPlannerBtn.style.display = isAdmin ? "inline-block" : "none";
+                    tabUsersBtn.style.display = isAdmin ? "inline-block" : "none";
+
+                    document.getElementById("loggedInUserDisplay").innerText = `${currentUser.toUpperCase()} ${isAdmin ? '(Admin)' : ''}`;
+
+                    let landing = data.landingPage || "view";
+                    if (landing === "edit" && !userCanEdit) landing = "view";
+                    if (landing === "users" && !isAdmin) landing = "view";
+
+                    if (landing === "edit") {
+                        switchToPlannerView(true);
+                    } else if (landing === "users" && isAdmin) {
+                        switchToUsersView();
+                    } else {
+                        switchToPlannerView(false);
+                    }
+                } else {
+                    if (statusElement) statusElement.innerText = "Incorrect PIN!";
+                }
+            } else {
+                if (statusElement) statusElement.innerText = "User does not exist!";
+            }
+        }).catch((err) => {
+            console.error(err);
+            if (statusElement) statusElement.innerText = "Login error!";
+        });
+    }
+
+    document.getElementById("loginBtnGate").addEventListener("click", () => {
+        const name = document.getElementById("usernameInputGate").value.trim().toLowerCase();
+        const pin = document.getElementById("pinInputGate").value.trim();
+        performLogin(name, pin, document.getElementById("authStatusGate"));
+    });
+
+    window.addEventListener("DOMContentLoaded", () => {
+        const params = new URLSearchParams(window.location.search);
+        
+        if (params.has("profile")) {
+            isProfileMode = true;
+            profileTargetUser = params.get("profile").trim().toLowerCase();
+            const allowSelection = params.get("allowselection");
+
+            document.body.classList.add("is-profile-embed");
+
+            if (headerRow) headerRow.style.display = "none";
+            if (loginGate) loginGate.style.display = "none";
+            if (editModeAuthCard) editModeAuthCard.style.display = "none";
+            if (debugFooter) debugFooter.style.display = "none";
+
+            if (allowSelection === "false" && mainNavBar) {
+                mainNavBar.style.display = "none";
+            }
+
+            appContent.style.display = "flex";
+            userCanEdit = false;
+            
+            switchToPlannerView(false);
+            return;
+        }
+
+        const urlUser = params.get("user") || params.get("username");
+        const urlPin = params.get("pin");
+
+        if (urlUser && urlPin) {
+            performLogin(urlUser.trim().toLowerCase(), urlPin.trim(), document.getElementById("authStatusGate"));
+        }
+    });
+
+    document.getElementById("logoutBtn").addEventListener("click", () => {
+        currentUser = null;
+        isAdmin = false;
+        userCanEdit = true;
+        isEditMode = false;
+        modeBtn.innerText = "Switch to Edit Mode";
+
+        appContent.style.display = "none";
+        loginGate.style.display = "block";
+        modeBtn.style.display = "none";
+        tabPlannerBtn.style.display = "none";
+        tabUsersBtn.style.display = "none";
+        editModeAuthCard.style.display = "none";
+
+        document.getElementById("usernameInputGate").value = "";
+        document.getElementById("pinInputGate").value = "";
+        document.getElementById("authStatusGate").innerText = "";
+    });
+
+    function updateEditAuthCardVisibility() {
+        if (isProfileMode) {
+            editModeAuthCard.style.display = "none";
+            return;
+        }
+
+        if (isEditMode && plannerTab.classList.contains("active")) {
+            editModeAuthCard.style.display = "flex";
+        } else {
+            editModeAuthCard.style.display = "none";
+        }
+    }
+
+    function getDirectLoginUrl(username, pin) {
+        const baseUrl = window.location.origin + window.location.pathname;
+        return `${baseUrl}?user=${encodeURIComponent(username)}&pin=${encodeURIComponent(pin)}`;
+    }
+
+    window.updateNewUserLandingOptions = function() {
+        const canEdit = document.getElementById("newCanEdit").checked;
+        const isAdmin = document.getElementById("newIsAdmin").checked;
+        const landingSelect = document.getElementById("newLandingPage");
+
+        landingSelect.options[1].disabled = !canEdit;
+        landingSelect.options[2].disabled = !isAdmin;
+
+        if (landingSelect.value === "edit" && !canEdit) landingSelect.value = "view";
+        if (landingSelect.value === "users" && !isAdmin) landingSelect.value = "view";
+    };
+
+    function renderFilterUserList() {
+        const filterContainer = document.getElementById("filterUsersList");
+        filterContainer.innerHTML = "";
+
+        const filterableUsers = usersList.filter(u => {
+            const userInfo = usersDataMap[u] || {};
+            const isUserAdmin = userInfo.admin === true || userInfo.admin === "true";
+            const isUserEditable = userInfo.canEdit !== undefined ? (userInfo.canEdit === true || userInfo.canEdit === "true") : true;
+            return isUserEditable && !isUserAdmin;
+        });
+
+        filterableUsers.forEach(u => {
+            if (activeUserFilters[u] === undefined) {
+                if (profileTargetUser) {
+                    activeUserFilters[u] = (u.toLowerCase() === profileTargetUser);
+                } else {
+                    activeUserFilters[u] = true;
+                }
+            }
+
+            const label = document.createElement("label");
+            label.className = "filter-user-item";
+            label.innerHTML = `
+                <input type="checkbox" ${activeUserFilters[u] ? 'checked' : ''} onchange="toggleUserFilter('${u}', this.checked)">
+                <span>${u}</span>
+            `;
+            filterContainer.appendChild(label);
+        });
+    }
+
+    window.toggleUserFilter = function(username, isChecked) {
+        activeUserFilters[username] = isChecked;
+        renderEvents();
+    };
+
+    window.setAllUserFilters = function(state) {
+        usersList.forEach(u => {
+            const userInfo = usersDataMap[u] || {};
+            const isUserAdmin = userInfo.admin === true || userInfo.admin === "true";
+            const isUserEditable = userInfo.canEdit !== undefined ? (userInfo.canEdit === true || userInfo.canEdit === "true") : true;
+            if (isUserEditable && !isUserAdmin) {
+                activeUserFilters[u] = state;
+            }
+        });
+        renderFilterUserList();
+        renderEvents();
+    };
+
+    onValue(ref(db, 'users'), (snapshot) => {
+        const tableBody = document.getElementById("userTableBody");
+        tableBody.innerHTML = "";
+        usersList = [];
+        usersDataMap = {};
+
+        if (snapshot.exists()) {
+            usersDataMap = snapshot.val();
+            usersList = Object.keys(usersDataMap);
+            renderFilterUserList();
+
+            usersList.forEach(u => {
+                const isUserAdmin = usersDataMap[u].admin === true || usersDataMap[u].admin === "true";
+                const isUserEditable = usersDataMap[u].canEdit !== undefined ? (usersDataMap[u].canEdit === true || usersDataMap[u].canEdit === "true") : true;
+                const landingPage = usersDataMap[u].landingPage || "view";
+                const loginUrl = getDirectLoginUrl(u, usersDataMap[u].pin);
+
+                const row = document.createElement("tr");
+                row.innerHTML = `
+                    <td><b>${u}</b></td>
+                    <td>${usersDataMap[u].pin}</td>
+                    <td>${isUserAdmin ? 'Admin' : 'User'}</td>
+                    <td>
+                        <input type="checkbox" ${isUserEditable ? 'checked' : ''} onchange="toggleUserCanEdit('${u}', this.checked)">
+                    </td>
+                    <td>
+                        <select onchange="updateUserLandingPage('${u}', this.value)" id="landing-${u}">
+                            <option value="view" ${landingPage === 'view' ? 'selected' : ''}>View page</option>
+                            <option value="edit" ${landingPage === 'edit' ? 'selected' : ''} ${!isUserEditable ? 'disabled' : ''}>Edit page</option>
+                            <option value="users" ${landingPage === 'users' ? 'selected' : ''} ${!isUserAdmin ? 'disabled' : ''}>User management</option>
+                        </select>
+                    </td>
+                    <td>
+                        <div class="link-input-group">
+                            <input type="text" readonly value="${loginUrl}" id="link-${u}" onclick="this.select()">
+                            <button class="btn" onclick="copyUserLink('${u}')">Copy</button>
+                        </div>
+                    </td>
+                    <td>
+                        <button class="btn-danger" style="padding:2px 6px; font-size:0.7em; margin-right: 4px;" onclick="deleteAllUserBlocks('${u}')">Delete All Blocks</button>
+                        <button class="btn-danger" style="padding:2px 6px; font-size:0.7em; background: #6c757d;" onclick="deleteUser('${u}')">Delete Account</button>
+                    </td>
+                `;
+                tableBody.appendChild(row);
+            });
+        }
+    });
+
+    window.copyUserLink = function(username) {
+        const inputElem = document.getElementById(`link-${username}`);
+        if (inputElem) {
+            inputElem.select();
+            navigator.clipboard.writeText(inputElem.value).then(() => {
+                alert(`Login URL for '${username}' copied to clipboard!`);
+            }).catch(() => {
+                document.execCommand('copy');
+                alert(`Login URL for '${username}' copied to clipboard!`);
+            });
+        }
+    };
+
+    window.toggleUserCanEdit = function(username, canEditState) {
+        set(ref(db, `users/${username}/canEdit`), canEditState).then(() => {
+            if (!canEditState) {
+                get(ref(db, `users/${username}/landingPage`)).then((snap) => {
+                    if (snap.val() === "edit") {
+                        set(ref(db, `users/${username}/landingPage`), "view");
+                    }
+                });
+            }
+        });
+    };
+
+    window.updateUserLandingPage = function(username, landingValue) {
+        set(ref(db, `users/${username}/landingPage`), landingValue);
+    };
+
+    document.getElementById("createUserBtn").addEventListener("click", () => {
+        const newName = document.getElementById("newUsername").value.trim().toLowerCase();
+        const newPin = document.getElementById("newPin").value.trim();
+        const newCanEdit = document.getElementById("newCanEdit").checked;
+        const newIsAdmin = document.getElementById("newIsAdmin").checked;
+        const newLanding = document.getElementById("newLandingPage").value;
+        const status = document.getElementById("addUserStatus");
+
+        if (!newName || newPin.length !== 4) {
+            status.innerText = "Please provide username & 4-digit PIN";
+            return;
+        }
+
+        set(ref(db, `users/${newName}`), {
+            pin: String(newPin),
+            canEdit: newCanEdit,
+            admin: newIsAdmin,
+            landingPage: newLanding
+        }).then(() => {
+            status.innerText = `User '${newName}' created successfully!`;
+            document.getElementById("newUsername").value = "";
+            document.getElementById("newPin").value = "";
+            document.getElementById("newCanEdit").checked = true;
+            document.getElementById("newIsAdmin").checked = false;
+            document.getElementById("newLandingPage").value = "view";
+            updateNewUserLandingOptions();
+        });
+    });
+
+    window.deleteAllUserBlocks = function(username) {
+        const confirmMessage = `⚠️ WARNING: Are you sure you want to delete ALL event blocks created by '${username}'?\n\nThis cannot be undone!`;
+        
+        if (confirm(confirmMessage)) {
+            let deletedCount = 0;
+            eventsData.forEach(event => {
+                if (event.user === username) {
+                    remove(ref(db, `events/${event.id}`));
+                    deletedCount++;
+                }
+            });
+            alert(`Successfully deleted ${deletedCount} block(s) belonging to '${username}'.`);
+        }
+    };
+
+    window.deleteUser = function(username) {
+        if (confirm(`Are you sure you want to delete the account '${username}'?`)) {
+            remove(ref(db, `users/${username}`));
+        }
+    };
+
+    onValue(ref(db, 'events'), (snapshot) => {
+        eventsData = [];
+        if (snapshot.exists()) {
+            const data = snapshot.val();
+            Object.keys(data).forEach(key => {
+                eventsData.push({ id: key, ...data[key] });
+            });
+        }
+        renderEvents();
+    });
+
+    modeBtn.addEventListener("click", () => {
+        if (isProfileMode || !userCanEdit) {
+            return;
+        }
+        isEditMode = !isEditMode;
+        modeBtn.innerText = isEditMode ? "Switch to View Mode" : "Switch to Edit Mode";
+        updateEditAuthCardVisibility();
+        renderEvents();
+    });
+
+    function handleMouseDown(day, hour) {
+        if (isProfileMode || !isEditMode || !userCanEdit) return;
+        isDragging = true;
+        dragDay = day;
+        dragStartHour = hour;
+        dragEndHour = hour;
+        highlightCells();
+    }
+
+    function handleMouseEnter(day, hour) {
+        if (isProfileMode || !isDragging || dragDay !== day) return;
+        dragEndHour = hour;
+        highlightCells();
+    }
+
+    function handleMouseUp() {
+        if (isProfileMode || !isDragging) return;
+        isDragging = false;
+
+        const start = Math.min(dragStartHour, dragEndHour);
+        const end = Math.max(dragStartHour, dragEndHour) + 1;
+
+        clearHighlights();
+        openModalForNew(dragDay, start, end);
+    }
+
+    function highlightCells() {
+        clearHighlights();
+        const start = Math.min(dragStartHour, dragEndHour);
+        const end = Math.max(dragStartHour, dragEndHour);
+        const dayCol = document.getElementById(`day-${dragDay}`);
+
+        for (let h = start; h <= end; h++) {
+            const cell = dayCol.querySelector(`[data-hour="${h}"]`);
+            if (cell) cell.classList.add("selecting");
+        }
+    }
+
+    function clearHighlights() {
+        document.querySelectorAll(".hour-cell.selecting").forEach(c => c.classList.remove("selecting"));
+    }
+
+    function openModalForNew(day, startHour, endHour) {
+        if (isProfileMode || !currentUser || !userCanEdit) return;
+        document.getElementById("modalTitle").innerText = "Add Block";
+        document.getElementById("modalEventId").value = "";
+        document.getElementById("modalSeriesId").value = "";
+        document.getElementById("eventDay").value = day;
+        document.getElementById("eventStartTime").value = `${String(startHour).padStart(2, '0')}:00`;
+        document.getElementById("eventEndTime").value = `${String(endHour).padStart(2, '0')}:00`;
+        document.getElementById("eventReason").value = "";
+        document.getElementById("eventRepeat").value = "none";
+        document.getElementById("eventUntilDate").value = "";
+        document.getElementById("deleteBtn").style.display = "none";
+
+        document.getElementById("eventModal").classList.add("active");
+    }
+
+    window.closeModal = function() {
+        document.getElementById("eventModal").classList.remove("active");
+    };
+
+    window.closeOverflowModal = function() {
+        document.getElementById("overflowModal").classList.remove("active");
+    };
+
+    document.getElementById("saveEventBtn").addEventListener("click", () => {
+        if (isProfileMode) return;
+        const id = document.getElementById("modalEventId").value;
+        const day = parseInt(document.getElementById("eventDay").value);
+        const reason = document.getElementById("eventReason").value || "Busy";
+        const startTimeVal = document.getElementById("eventStartTime").value;
+        const endTimeVal = document.getElementById("eventEndTime").value;
+        const color = document.getElementById("eventColor").value;
+        const repeat = document.getElementById("eventRepeat").value;
+        const untilDate = document.getElementById("eventUntilDate").value;
+
+        const start = timeStrToHours(startTimeVal);
+        const end = timeStrToHours(endTimeVal);
+
+        if (start >= end) {
+            alert("Start time must be before end time.");
+            return;
+        }
+
+        const originDate = new Date(currentMonday);
+        originDate.setDate(originDate.getDate() + day);
+
+        const startH = Math.floor(start);
+        const startM = Math.round((start - startH) * 60);
+        const startDateUtc = new Date(originDate);
+        startDateUtc.setHours(startH, startM, 0, 0);
+
+        const endH = Math.floor(end);
+        const endM = Math.round((end - endH) * 60);
+        const endDateUtc = new Date(originDate);
+        endDateUtc.setHours(endH, endM, 0, 0);
+
+        const existingEvent = id ? eventsData.find(e => e.id === id) : null;
+        const createdDate = existingEvent ? (existingEvent.createdDate || formatDateString(originDate)) : formatDateString(originDate);
+
+        const eventData = {
+            user: currentUser,
+            day: day,
+            reason: reason,
+            start: start,
+            end: end,
+            startUtcIso: startDateUtc.toISOString(),
+            endUtcIso: endDateUtc.toISOString(),
+            color: color,
+            repeat: repeat,
+            untilDate: untilDate || null,
+            createdDate: createdDate,
+            seriesId: document.getElementById("modalSeriesId").value || (repeat !== 'none' ? 'series_' + Date.now() : null)
+        };
+
+        if (id) {
+            set(ref(db, `events/${id}`), eventData);
+        } else {
+            push(ref(db, 'events'), eventData);
+        }
+
+        closeModal();
+    });
+
+    window.promptDelete = function() {
+        if (isProfileMode) return;
+        const seriesId = document.getElementById("modalSeriesId").value;
+        if (seriesId && seriesId !== "null") {
+            document.getElementById("deleteModal").classList.add("active");
+        } else {
+            confirmDelete('single');
+        }
+    };
+
+    window.closeDeleteModal = function() {
+        document.getElementById("deleteModal").classList.remove("active");
+    };
+
+    window.confirmDelete = function(mode) {
+        if (isProfileMode) return;
+        const id = document.getElementById("modalEventId").value;
+        const seriesId = document.getElementById("modalSeriesId").value;
+
+        if (mode === 'single') {
+            remove(ref(db, `events/${id}`));
+        } else if (mode === 'all') {
+            eventsData.filter(e => e.seriesId === seriesId).forEach(e => {
+                remove(ref(db, `events/${e.id}`));
+            });
+        } else if (mode === 'future') {
+            eventsData.filter(e => e.seriesId === seriesId && e.id >= id).forEach(e => {
+                remove(ref(db, `events/${e.id}`));
+            });
+        }
+
+        closeDeleteModal();
+        closeModal();
+    };
+
+    function getLocalDisplayTimes(item, dayIndex) {
+        if (!item.startUtcIso || !item.endUtcIso) {
+            return { day: item.day, start: item.start, end: item.end };
+        }
+
+        const startUtc = new Date(item.startUtcIso);
+        const endUtc = new Date(item.endUtcIso);
+
+        const startHoursVal = startUtc.getHours() + startUtc.getMinutes() / 60;
+        let endHoursVal = endUtc.getHours() + endUtc.getMinutes() / 60;
+        if (endHoursVal === 0 && endUtc.getDate() !== startUtc.getDate()) {
+            endHoursVal = 24;
+        }
+
+        return {
+            day: (startUtc.getDay() + 6) % 7,
+            start: startHoursVal,
+            end: endHoursVal
+        };
+    }
+
+    function shouldRenderInCurrentWeek(item, dayIndex) {
+        const thisDay = new Date(currentMonday);
+        thisDay.setDate(thisDay.getDate() + dayIndex);
+        const thisDayStr = formatDateString(thisDay);
+
+        const createdStr = item.createdDate || thisDayStr;
+        const createdDate = new Date(createdStr);
+
+        if (thisDayStr < createdStr) return false;
+
+        if (item.untilDate && thisDayStr > item.untilDate) {
+            return false;
+        }
+
+        const localTimes = getLocalDisplayTimes(item, dayIndex);
+
+        if (!item.repeat || item.repeat === 'none') {
+            return createdStr === thisDayStr;
+        }
+
+        if (item.repeat === 'weekly') {
+            return localTimes.day === dayIndex;
+        }
+
+        if (item.repeat === 'monthly') {
+            return createdDate.getDate() === thisDay.getDate();
+        }
+
+        if (item.repeat === 'annually') {
+            return createdDate.getDate() === thisDay.getDate() && createdDate.getMonth() === thisDay.getMonth();
+        }
+
+        return false;
+    }
+
+    function openOverflowModal(eventsList) {
+        const listElem = document.getElementById("overflowList");
+        listElem.innerHTML = "";
+
+        eventsList.forEach(item => {
+            const div = document.createElement("div");
+            div.className = "overflow-list-item";
+            div.style.borderLeft = `4px solid ${item.color || '#ff85a2'}`;
+            div.style.paddingLeft = "8px";
+            div.style.marginBottom = "6px";
+            div.innerHTML = `
+                <b>${item.user}</b>: ${item.reason}<br>
+                <small style="color:var(--sub-text);">${formatTimeStr(item.localTimes.start)} - ${formatTimeStr(item.localTimes.end)}</small>
+            `;
+
+            if (!isProfileMode && (isAdmin || item.user === currentUser)) {
+                div.style.cursor = "pointer";
+                div.addEventListener("click", () => {
+                    closeOverflowModal();
+                    document.getElementById("modalTitle").innerText = "Modify Block";
+                    document.getElementById("modalEventId").value = item.id;
+                    document.getElementById("modalSeriesId").value = item.seriesId || "";
+                    document.getElementById("eventDay").value = item.localTimes.day;
+                    document.getElementById("eventStartTime").value = formatTimeStr(item.localTimes.start);
+                    document.getElementById("eventEndTime").value = formatTimeStr(item.localTimes.end);
+                    document.getElementById("eventReason").value = item.reason;
+                    document.getElementById("eventColor").value = item.color;
+                    document.getElementById("eventRepeat").value = item.repeat || "none";
+                    document.getElementById("eventUntilDate").value = item.untilDate || "";
+                    document.getElementById("deleteBtn").style.display = "block";
+                    document.getElementById("eventModal").classList.add("active");
+                });
+            }
+
+            listElem.appendChild(div);
+        });
+
+        document.getElementById("overflowModal").classList.add("active");
+    }
+
+    function renderEvents() {
+        for (let d = 0; d < 7; d++) {
+            const dayCol = document.getElementById(`day-${d}`);
+            dayCol.querySelectorAll('.event-block').forEach(b => b.remove());
+        }
+
+        if (isProfileMode || (isEditMode && userCanEdit)) {
+            viewModeFilterBar.style.display = "none";
+
+            for (let d = 0; d < 7; d++) {
+                const dayCol = document.getElementById(`day-${d}`);
+                
+                const dayEvents = [];
+                eventsData.forEach(item => {
+                    if (isProfileMode && profileTargetUser && item.user.toLowerCase() !== profileTargetUser) return;
+                    if (!isProfileMode && !isAdmin && item.user !== currentUser) return;
+                    
+                    if (shouldRenderInCurrentWeek(item, d)) {
+                        const localTimes = getLocalDisplayTimes(item, d);
+                        dayEvents.push({
+                            ...item,
+                            localTimes: localTimes
+                        });
+                    }
+                });
+
+                if (dayEvents.length === 0) continue;
+
+                dayEvents.sort((a, b) => a.localTimes.start - b.localTimes.start || (b.localTimes.end - b.localTimes.start) - (a.localTimes.end - a.localTimes.start));
+
+                const groups = [];
+                dayEvents.forEach(event => {
+                    let added = false;
+                    for (let group of groups) {
+                        const overlaps = group.some(e => !(event.localTimes.end <= e.localTimes.start || event.localTimes.start >= e.localTimes.end));
+                        if (overlaps) {
+                            group.push(event);
+                            added = true;
+                            break;
+                        }
+                    }
+                    if (!added) {
+                        groups.push([event]);
+                    }
+                });
+
+                groups.forEach(group => {
+                    if (group.length > 3) {
+                        const minStart = Math.min(...group.map(e => e.localTimes.start));
+                        const maxEnd = Math.max(...group.map(e => e.localTimes.end));
+
+                        const block = document.createElement("div");
+                        block.className = "event-block overflow-block";
+
+                        const topPct = (minStart / 24) * 100;
+                        const heightPct = ((maxEnd - minStart) / 24) * 100;
+
+                        block.style.top = `${topPct}%`;
+                        block.style.height = `${heightPct}%`;
+                        block.style.left = `2px`;
+                        block.style.width = `calc(100% - 4px)`;
+
+                        block.innerHTML = `<span><b>${group.length} Events</b></span><small>(Click)</small>`;
+
+                        block.addEventListener("click", (e) => {
+                            e.stopPropagation();
+                            openOverflowModal(group);
+                        });
+
+                        dayCol.appendChild(block);
+                    } else {
+                        const widthPercent = 100 / group.length;
+
+                        group.forEach((item, idx) => {
+                            const block = document.createElement("div");
+                            block.className = `event-block ${isProfileMode ? 'read-only-block' : ''}`;
+
+                            const topPct = (item.localTimes.start / 24) * 100;
+                            const heightPct = ((item.localTimes.end - item.localTimes.start) / 24) * 100;
+
+                            block.style.top = `${topPct}%`;
+                            block.style.height = `${heightPct}%`;
+                            block.style.left = `calc(${idx * widthPercent}% + 1px)`;
+                            block.style.width = `calc(${widthPercent}% - 2px)`;
+                            block.style.backgroundColor = item.color;
+                            
+                            const timeLabelStr = ` (${formatTimeStr(item.localTimes.start)}-${formatTimeStr(item.localTimes.end)})`;
+                            block.innerHTML = `<span>${item.user}:</span><span>${item.reason}${timeLabelStr}</span>`;
+
+                            if (!isProfileMode) {
+                                block.addEventListener("click", (e) => {
+                                    e.stopPropagation();
+                                    document.getElementById("modalTitle").innerText = "Modify Block";
+                                    document.getElementById("modalEventId").value = item.id;
+                                    document.getElementById("modalSeriesId").value = item.seriesId || "";
+                                    document.getElementById("eventDay").value = d;
+                                    document.getElementById("eventStartTime").value = formatTimeStr(item.localTimes.start);
+                                    document.getElementById("eventEndTime").value = formatTimeStr(item.localTimes.end);
+                                    document.getElementById("eventReason").value = item.reason;
+                                    document.getElementById("eventColor").value = item.color;
+                                    document.getElementById("eventRepeat").value = item.repeat || "none";
+                                    document.getElementById("eventUntilDate").value = item.untilDate || "";
+                                    document.getElementById("deleteBtn").style.display = "block";
+
+                                    document.getElementById("eventModal").classList.add("active");
+                                });
+                            }
+
+                            dayCol.appendChild(block);
+                        });
+                    }
+                });
+            }
+        } else {
+            viewModeFilterBar.style.display = "flex";
+
+            for (let d = 0; d < 7; d++) {
+                const dayCol = document.getElementById(`day-${d}`);
+                
+                // 1440 minutes per day slice
+                let minutes = new Array(1440).fill(false);
+
+                eventsData.forEach(e => {
+                    const isUserIncluded = activeUserFilters[e.user] !== false;
+
+                    if (isUserIncluded && shouldRenderInCurrentWeek(e, d)) {
+                        const localTimes = getLocalDisplayTimes(e, d);
+                        const startMin = Math.max(0, Math.min(1439, Math.floor(localTimes.start * 60)));
+                        const endMin = Math.max(0, Math.min(1440, Math.floor(localTimes.end * 60)));
+                        
+                        for (let m = startMin; m < endMin; m++) {
+                            minutes[m] = true;
+                        }
+                    }
+                });
+
+                let currentStatus = minutes[0];
+                let startMin = 0;
+
+                for (let m = 1; m <= 1440; m++) {
+                    if (m === 1440 || minutes[m] !== currentStatus) {
+                        const block = document.createElement("div");
+                        block.className = `event-block ${currentStatus ? 'view-busy' : 'view-free'}`;
+
+                        const topPct = (startMin / 1440) * 100;
+                        const heightPct = ((m - startMin) / 1440) * 100;
+
+                        block.style.top = `${topPct}%`;
+                        block.style.height = `${heightPct}%`;
+                        block.style.left = `2px`;
+                        block.style.width = `calc(100% - 4px)`;
+                        
+                        // Only show text if block is tall enough to render nicely
+                        if (heightPct > 2) {
+                            block.innerText = currentStatus ? "BUSY" : "FREE";
+                        }
+
+                        dayCol.appendChild(block);
+
+                        startMinute = m;
+                        if (m < 1440) currentStatus = minutes[m];
+                    }
+                }
+            }
+        }
+    }
+</script>
+
+</body>
+</html>
