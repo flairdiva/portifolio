@@ -360,6 +360,33 @@
             cursor: default;
         }
 
+        .day-column.heatmap-hover-column::before,
+        .day-column.heatmap-hover-column::after {
+            content: "";
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            border-left: 1px dotted rgba(90, 90, 90, 0.5);
+            pointer-events: none;
+            z-index: 4;
+        }
+
+        .day-column.heatmap-hover-column::before { left: 0; }
+        .day-column.heatmap-hover-column::after { right: 0; }
+
+        .calendar-container.heatmap-hover::after {
+            content: "";
+            position: absolute;
+            top: calc(24px + var(--heatmap-hover-top));
+            left: 50px;
+            right: 0;
+            height: var(--heatmap-hover-row-height);
+            border-top: 1px dotted rgba(90, 90, 90, 0.5);
+            border-bottom: 1px dotted rgba(90, 90, 90, 0.5);
+            pointer-events: none;
+            z-index: 5;
+        }
+
         .admin-box {
             background: #fffcfc;
             border: 1px solid var(--light-pink);
@@ -749,6 +776,36 @@
     const headerRow = document.getElementById("headerRow");
     const debugFooter = document.getElementById("debugFooter");
     const mainNavBar = document.getElementById("mainNavBar");
+    const calendarContainer = document.getElementById("calendarContainer");
+
+    function isHeatmapMode() {
+        return !isProfileMode && !(isEditMode && userCanEdit);
+    }
+
+    function updateHeatmapHover(dayColumn, event) {
+        if (!isHeatmapMode()) {
+            clearHeatmapHover();
+            return;
+        }
+
+        const bounds = dayColumn.getBoundingClientRect();
+        const rowHeight = bounds.height / 24;
+        const hour = Math.min(23, Math.floor((event.clientY - bounds.top) / rowHeight));
+        calendarContainer.style.setProperty("--heatmap-hover-top", `${hour * rowHeight}px`);
+        calendarContainer.style.setProperty("--heatmap-hover-row-height", `${rowHeight}px`);
+        calendarContainer.classList.add("heatmap-hover");
+        document.querySelectorAll(".day-column.heatmap-hover-column").forEach(column => {
+            column.classList.remove("heatmap-hover-column");
+        });
+        dayColumn.classList.add("heatmap-hover-column");
+    }
+
+    function clearHeatmapHover() {
+        calendarContainer.classList.remove("heatmap-hover");
+        document.querySelectorAll(".day-column.heatmap-hover-column").forEach(column => {
+            column.classList.remove("heatmap-hover-column");
+        });
+    }
 
     function formatHourLabel(hour) {
         return `${String(hour).padStart(2, '0')}:00`;
@@ -838,6 +895,8 @@
         for (let d = 0; d < 7; d++) {
             const dayCol = document.getElementById(`day-${d}`);
             dayCol.innerHTML = "";
+            dayCol.addEventListener("mousemove", (event) => updateHeatmapHover(dayCol, event));
+            dayCol.addEventListener("mouseleave", clearHeatmapHover);
             for (let h = 0; h < 24; h++) {
                 const cell = document.createElement("div");
                 cell.className = "hour-cell";
@@ -1512,6 +1571,8 @@
     }
 
     function renderEvents() {
+        if (!isHeatmapMode()) clearHeatmapHover();
+
         for (let d = 0; d < 7; d++) {
             const dayCol = document.getElementById(`day-${d}`);
             dayCol.querySelectorAll('.event-block').forEach(b => b.remove());
@@ -1670,7 +1731,7 @@
 
                         dayCol.appendChild(block);
 
-                        startMinute = m;
+                        startMin = m;
                         if (m < 1440) currentStatus = minutes[m];
                     }
                 }
