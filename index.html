@@ -42,10 +42,33 @@
             margin: 0;
         }
 
+        body[data-season="christmas"] {
+            background:
+                radial-gradient(ellipse at 10% 12%, rgba(196, 226, 255, 0.72), transparent 36%),
+                linear-gradient(145deg, #eaf5ff, #f8fbff 48%, #eaf6f0);
+        }
+
+        body[data-season="halloween"] {
+            background:
+                radial-gradient(ellipse at 12% 18%, rgba(255, 144, 48, 0.22), transparent 34%),
+                radial-gradient(ellipse at 88% 78%, rgba(123, 51, 154, 0.2), transparent 38%),
+                linear-gradient(145deg, #21152b, #382039 52%, #201b31);
+            color: #f7e9d8;
+        }
+
+        body[data-season="easter"] {
+            background:
+                radial-gradient(ellipse at 12% 14%, rgba(255, 207, 224, 0.8), transparent 36%),
+                radial-gradient(ellipse at 88% 82%, rgba(201, 240, 200, 0.78), transparent 38%),
+                linear-gradient(145deg, #fff5f7, #f5fbef);
+        }
+
         .container {
+            position: relative;
             background: var(--card-bg);
             width: 100%;
-            max-width: 600px;
+            max-width: 680px;
+            box-sizing: border-box;
             padding: 40px;
             border-radius: 30px;
             box-shadow: 0 15px 35px rgba(255, 133, 162, 0.1);
@@ -53,31 +76,272 @@
             margin-bottom: 20px;
         }
 
+        body[data-season="christmas"] .container {
+            --card-bg: rgba(255, 255, 255, 0.94);
+            border: 1px solid rgba(151, 196, 230, 0.65);
+            box-shadow: 0 15px 40px rgba(34, 91, 126, 0.16);
+        }
+
+        body[data-season="halloween"] .container {
+            --card-bg: rgba(47, 33, 54, 0.96);
+            --text-main: #f7e9d8;
+            border: 1px solid rgba(255, 151, 57, 0.52);
+            box-shadow: 0 15px 42px rgba(12, 8, 20, 0.38);
+        }
+
+        body[data-season="easter"] .container {
+            --card-bg: rgba(255, 255, 255, 0.94);
+            border: 1px solid rgba(236, 174, 202, 0.65);
+            box-shadow: 0 15px 40px rgba(125, 102, 99, 0.15);
+        }
+
+        body[data-season="halloween"] .profile-banner::after {
+            background: linear-gradient(to bottom, transparent, var(--card-bg));
+        }
+
+        .seasonal-scene {
+            position: fixed;
+            inset: 0;
+            z-index: 10;
+            display: none;
+            overflow: hidden;
+            pointer-events: none;
+            user-select: none;
+        }
+
+        body[data-season="christmas"] .seasonal-scene,
+        body[data-season="halloween"] .seasonal-scene,
+        body[data-season="easter"] .seasonal-scene {
+            display: block;
+        }
+
+        .seasonal-weather {
+            position: absolute;
+            inset: -100% 0 0;
+            opacity: 0;
+        }
+
+        body[data-season="christmas"] .seasonal-weather {
+            opacity: 0.8;
+            background-image:
+                radial-gradient(3px 3px at 20px 30px, #fff 98%, transparent),
+                radial-gradient(2px 2px at 90px 80px, #fff 98%, transparent),
+                radial-gradient(4px 4px at 150px 20px, #fff 98%, transparent),
+                radial-gradient(2px 2px at 210px 110px, #fff 98%, transparent),
+                radial-gradient(3px 3px at 270px 55px, #fff 98%, transparent);
+            background-size: 300px 150px;
+            animation: seasonal-fall 12s linear infinite;
+        }
+
+        body[data-season="christmas"] .seasonal-weather:nth-child(2) {
+            opacity: 0.55;
+            background-position: 70px 20px;
+            background-size: 230px 120px;
+            animation-duration: 18s;
+            animation-direction: reverse;
+        }
+
+        body[data-season="halloween"] .seasonal-weather {
+            opacity: 0.8;
+            background-image:
+                radial-gradient(2px 2px at 30px 35px, rgba(255, 168, 74, 0.9) 98%, transparent),
+                radial-gradient(3px 3px at 140px 90px, rgba(178, 112, 220, 0.8) 98%, transparent),
+                radial-gradient(2px 2px at 250px 40px, rgba(255, 220, 166, 0.9) 98%, transparent);
+            background-size: 300px 160px;
+            animation: seasonal-fall 16s linear infinite;
+        }
+
+        body[data-season="easter"] .seasonal-weather {
+            opacity: 0.7;
+            background-image:
+                radial-gradient(4px 4px at 35px 40px, rgba(255, 190, 211, 0.95) 98%, transparent),
+                radial-gradient(3px 3px at 120px 95px, rgba(255, 234, 151, 0.95) 98%, transparent),
+                radial-gradient(4px 4px at 230px 25px, rgba(180, 221, 175, 0.95) 98%, transparent);
+            background-size: 280px 140px;
+            animation: seasonal-fall 20s linear infinite;
+        }
+
+        .seasonal-accent {
+            position: absolute;
+            bottom: 12px;
+            font-size: clamp(2.5rem, 7vw, 5rem);
+            line-height: 1;
+            filter: drop-shadow(0 5px 8px rgba(0, 0, 0, 0.24));
+            animation: seasonal-float 4s ease-in-out infinite;
+        }
+
+        .seasonal-accent-left {
+            left: 18px;
+        }
+
+        .seasonal-accent-right {
+            right: 18px;
+            animation-delay: -2s;
+        }
+
+        body[data-season="christmas"] .seasonal-accent-left::before {
+            content: "🎄";
+        }
+
+        body[data-season="christmas"] .seasonal-accent-right::before {
+            content: "🎁";
+        }
+
+        body[data-season="halloween"] .seasonal-accent-left::before {
+            content: "🎃";
+        }
+
+        body[data-season="halloween"] .seasonal-accent-right::before {
+            content: "🎃";
+        }
+
+        body[data-season="easter"] .seasonal-accent-left::before {
+            content: "🐰";
+        }
+
+        body[data-season="easter"] .seasonal-accent-right::before {
+            content: "🪺";
+        }
+
+        @keyframes seasonal-fall {
+            from { transform: translateY(0); }
+            to { transform: translateY(100vh); }
+        }
+
+        @keyframes seasonal-float {
+            0%, 100% { transform: translateY(0) rotate(-3deg); }
+            50% { transform: translateY(-12px) rotate(3deg); }
+        }
+
+        @media (max-width: 700px) {
+            .seasonal-accent {
+                bottom: 6px;
+                font-size: 2.5rem;
+                opacity: 0.78;
+            }
+
+            .seasonal-accent-left {
+                left: 4px;
+            }
+
+            .seasonal-accent-right {
+                right: 4px;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .seasonal-weather,
+            .seasonal-accent {
+                animation: none;
+            }
+        }
+
+        .profile-container {
+            position: relative;
+            overflow: hidden;
+            padding: 0 40px 40px;
+        }
+
+        .profile-banner {
+            position: relative;
+            height: 230px;
+            margin: 0 -40px -75px;
+            overflow: hidden;
+        }
+
+        .profile-banner img {
+            display: block;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center 45%;
+        }
+
+        .profile-banner::after {
+            content: "";
+            position: absolute;
+            inset: 45% 0 0;
+            background: linear-gradient(to bottom, transparent, var(--card-bg));
+            pointer-events: none;
+        }
+
         .profile-section {
             position: relative;
-            height: 180px;
+            height: 150px;
             margin-bottom: 10px;
             display: flex;
             justify-content: center;
             align-items: center;
         }
 
+        .swipe-cue {
+            display: none;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            align-items: center;
+            gap: 7px;
+            padding: 7px 11px;
+            border-radius: 20px;
+            background: rgba(255, 255, 255, 0.9);
+            color: var(--accent-pink);
+            font-size: 0.85em;
+            font-weight: 600;
+            box-shadow: 0 4px 12px rgba(74, 74, 74, 0.18);
+            opacity: 0;
+            pointer-events: none;
+            z-index: 5;
+        }
+
+        .swipe-cue i {
+            font-size: 1.25em;
+            transform: rotate(90deg);
+        }
+
+        .swipe-cue.is-visible {
+            animation: swipeCue 1.2s ease-in-out 0.5s both;
+        }
+
+        @keyframes swipeCue {
+            0% {
+                opacity: 0;
+                transform: translate(-50%, -50%) translateX(18px);
+            }
+            16% {
+                opacity: 1;
+            }
+            58% {
+                opacity: 1;
+                transform: translate(-50%, -50%);
+            }
+            76% {
+                opacity: 1;
+                transform: translate(-50%, -50%);
+            }
+            100% {
+                opacity: 0;
+                transform: translate(-50%, -50%);
+            }
+        }
+
         #pfp-popup {
             position: absolute;
-            bottom: 15px;
+            bottom: 0;
             left: 50%;
             transform: translateX(-50%);
             z-index: 100;
             margin: 0;
-            font-size: 1em;
+            font-size: 0.8em;
             color: var(--accent-pink);
             font-weight: bold;
-            background: var(--light-pink);
+            background: rgba(255, 228, 233, 0.78);
+            border: 1px solid rgba(255, 133, 162, 0.28);
             border-radius: 20px;
-            padding: 4px 14px;
+            padding: 2px 10px;
             width: max-content;
             text-align: center;
-            box-shadow: 0 4px 10px rgba(255, 133, 162, 0.3);
+            box-shadow: 0 3px 10px rgba(255, 133, 162, 0.16);
+            backdrop-filter: blur(5px);
             pointer-events: none;
             opacity: 0;
             visibility: hidden;
@@ -85,47 +349,60 @@
         }
 
         .pfp-container {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 0;
-            width: 390px;
-            height: 130px;
+            position: relative;
+            width: min(390px, 100%);
+            aspect-ratio: 3 / 1;
             margin: 0 auto;
-            transition: all 0.3s ease;
+            touch-action: pan-y;
+            user-select: none;
         }
 
         .pfp-container img {
-            width: 130px;
-            height: 130px;
+            position: absolute;
+            top: 0;
+            width: 33.333333%;
+            height: 100%;
             border-radius: 50%;
-            border: 5px solid var(--light-pink);
             object-fit: cover;
-            transition: all 0.3s ease;
-            box-shadow: 0 8px 20px rgba(255, 133, 162, 0.2);
+            filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.45));
             z-index: 1;
         }
 
         .pfp-left {
+            left: 0;
             opacity: 0.5;
             transform: scale(0.75);
         }
 
         .pfp-center {
+            left: 33.333333%;
             opacity: 1;
             transform: scale(1);
             z-index: 2;
         }
 
         .pfp-right {
+            left: 66.666667%;
             opacity: 0.5;
             transform: scale(0.75);
         }
 
-        .pfp-hidden {
-            opacity: 0;
+        .pfp-incoming {
+            display: none;
+            left: 0;
             pointer-events: none;
-            transform: scale(0.6);
+        }
+
+        .pfp-enter-from-left {
+            left: 0;
+        }
+
+        .pfp-enter-from-right {
+            left: 66.666667%;
+        }
+
+        .pfp-container.is-animating .pfp-incoming {
+            display: block;
         }
 
         .pfp-hint {
@@ -435,17 +712,114 @@
             margin: 15px 0 10px 0;
             text-align: left;
         }
+
+        @media (max-width: 600px) {
+            body {
+                padding: 24px 12px;
+            }
+
+            .container {
+                padding: 28px 20px;
+                border-radius: 24px;
+            }
+
+            .profile-container {
+                padding: 0 20px 30px;
+            }
+
+            .profile-banner {
+                height: auto;
+                aspect-ratio: 2.3 / 1;
+                margin: 0 -20px -75px;
+            }
+
+            .profile-section {
+                height: 150px;
+            }
+
+            .timezone-row {
+                gap: 10px;
+                padding: 5px 8px;
+            }
+
+            .timezone-info h2 {
+                font-size: 1.15em;
+            }
+
+        }
+
+        @media (max-width: 600px) and (prefers-reduced-motion: no-preference) {
+            .swipe-cue.is-visible {
+                display: flex;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .stats-grid {
+                grid-template-columns: minmax(0, 1fr);
+            }
+
+            .stat-item {
+                min-width: 0;
+            }
+
+            .game-grid {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+        }
+
+        @media (max-width: 360px) {
+            .container {
+                padding-right: 16px;
+                padding-left: 16px;
+            }
+
+            .profile-container {
+                padding-right: 16px;
+                padding-left: 16px;
+            }
+
+            .profile-banner {
+                margin-right: -16px;
+                margin-left: -16px;
+            }
+
+            .timezone-row {
+                gap: 6px;
+            }
+
+            .hybrid-clock {
+                width: 60px;
+                height: 60px;
+            }
+        }
     </style>
 </head>
 
 <body>
 
-    <div class="container">
+    <div class="seasonal-scene" aria-hidden="true">
+        <div class="seasonal-weather"></div>
+        <div class="seasonal-weather"></div>
+        <span class="seasonal-accent seasonal-accent-left"></span>
+        <span class="seasonal-accent seasonal-accent-right"></span>
+    </div>
+
+    <div class="container profile-container">
+        <div class="profile-banner">
+            <img src="Files/Portifolio_Banner.png" alt="A cozy attic room with windows overlooking trees">
+        </div>
+
         <div class="profile-section">
-            <div class="pfp-container" id="pfp-container">
-                <img class="pfp-left" id="pfp-left" src="" alt="">
-                <img class="pfp-center" id="pfp-center" src="" alt="">
-                <img class="pfp-right" id="pfp-right" src="" alt="">
+            <div class="pfp-container" id="pfp-container" role="group" aria-label="Profile pictures. Scroll or swipe to browse, or select a picture to view the biography.">
+                <img class="pfp-left" src="" alt="">
+                <img class="pfp-center" src="" alt="">
+                <img class="pfp-right" src="" alt="">
+                <img class="pfp-incoming" src="" alt="" aria-hidden="true">
+            </div>
+            <div class="swipe-cue" id="swipe-cue" aria-hidden="true">
+                <i class="fas fa-hand-pointer"></i>
+                <span>Swipe</span>
             </div>
             <div id="pfp-popup"></div>
         </div>
@@ -556,20 +930,57 @@
         // --- PFP Carousel & Age Logic ---
         const birthDateString = "2009-08-04";
 
+        // Set to "christmas", "halloween", "easter", or "none" to theme the entire page.
+        const activeSeason = "none";
+        const availableSeasons = ["none", "christmas", "halloween", "easter"];
+        if (!availableSeasons.includes(activeSeason)) {
+            throw new Error(`Unknown seasonal decoration: ${activeSeason}`);
+        }
+        document.body.dataset.season = activeSeason;
+
+        // Add each profile picture here; mark exactly one entry as the startup default.
         const pfpData = [
-            { src: "Files/Winter.png", alt: "Party/Special Version", url: "./Biography/index.html" },
-            { src: "Files/PFPNeutral.png", alt: "Default Version", url: "./Biography/index.html" },
-            { src: "Files/PFPSummer.png", alt: "Summer Version", url: "./Biography/index.html" }
+            { src: "Files/Winter.png", name: "Winter Version", alt: "Party/Special Version", url: "./Biography/index.html", isDefault: false },
+            { src: "Files/PFPNeutral.png", name: "Default Version", alt: "Default Version", url: "./Biography/index.html", isDefault: true },
+            { src: "Files/PFPSummer.png", name: "Summer Version", alt: "Summer Version", url: "./Biography/index.html", isDefault: false  }
         ];
 
-        let centerIdx = 1;
-        const pfpLeft = document.getElementById('pfp-left');
-        const pfpCenter = document.getElementById('pfp-center');
-        const pfpRight = document.getElementById('pfp-right');
+        const defaultPfpIndices = pfpData.reduce((indices, pfp, index) => {
+            if (pfp.isDefault) indices.push(index);
+            return indices;
+        }, []);
+        if (defaultPfpIndices.length !== 1) {
+            throw new Error('The profile picture carousel must have exactly one startup default (isDefault: true).');
+        }
+        if (pfpData.length < 3) {
+            throw new Error('The profile picture carousel needs at least three entries to fill all visible positions.');
+        }
+
+        let centerIdx = defaultPfpIndices[0];
         const pfpContainer = document.getElementById('pfp-container');
-        const pfpNames = ["Winter Version", "Default Version", "Summer Version"];
+        let pfpLeft = pfpContainer.querySelector('.pfp-left');
+        let pfpCenter = pfpContainer.querySelector('.pfp-center');
+        let pfpRight = pfpContainer.querySelector('.pfp-right');
+        let pfpIncoming = pfpContainer.querySelector('.pfp-incoming');
         const pfpPopup = document.getElementById('pfp-popup');
+        const swipeCue = document.getElementById('swipe-cue');
+        const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
         let popupTimeout = null;
+        let isAnimating = false;
+        let pointerStart = null;
+        let ignoreCarouselClickUntil = 0;
+
+        function showSwipeCue() {
+            if (window.matchMedia('(max-width: 600px)').matches && !prefersReducedMotion) {
+                swipeCue.classList.add('is-visible');
+            }
+        }
+
+        if (document.readyState === 'complete') {
+            showSwipeCue();
+        } else {
+            window.addEventListener('load', showSwipeCue, { once: true });
+        }
 
         function calculateAge(dob) {
             const birthDate = new Date(dob);
@@ -606,41 +1017,163 @@
 
             pfpLeft.src = pfpData[leftIdx].src;
             pfpLeft.alt = pfpData[leftIdx].alt;
+            pfpLeft.dataset.index = leftIdx;
+            pfpLeft.removeAttribute('aria-hidden');
             pfpCenter.src = pfpData[centerIdx].src;
             pfpCenter.alt = pfpData[centerIdx].alt;
+            pfpCenter.dataset.index = centerIdx;
+            pfpCenter.removeAttribute('aria-hidden');
             pfpRight.src = pfpData[rightIdx].src;
             pfpRight.alt = pfpData[rightIdx].alt;
+            pfpRight.dataset.index = rightIdx;
+            pfpRight.removeAttribute('aria-hidden');
+            pfpIncoming.alt = '';
+            pfpIncoming.setAttribute('aria-hidden', 'true');
 
-            if (showPopup) showPfpPopup(pfpNames[centerIdx]);
+            if (showPopup) showPfpPopup(pfpData[centerIdx].name);
         }
 
         updateCarousel(false);
 
+        function assignCarouselSlots(direction) {
+            const outgoing = direction > 0 ? pfpLeft : pfpRight;
+
+            if (direction > 0) {
+                pfpLeft = pfpCenter;
+                pfpCenter = pfpRight;
+                pfpRight = pfpIncoming;
+            } else {
+                pfpRight = pfpCenter;
+                pfpCenter = pfpLeft;
+                pfpLeft = pfpIncoming;
+            }
+
+            pfpIncoming = outgoing;
+            pfpLeft.className = 'pfp-left';
+            pfpCenter.className = 'pfp-center';
+            pfpRight.className = 'pfp-right';
+            pfpIncoming.className = 'pfp-incoming';
+        }
+
+        async function rotateCarousel(direction) {
+            if (isAnimating) return;
+
+            const nextCenterIdx = (centerIdx + direction + pfpData.length) % pfpData.length;
+            const incomingIdx = (nextCenterIdx + direction + pfpData.length) % pfpData.length;
+            const incomingImage = pfpIncoming;
+            incomingImage.src = pfpData[incomingIdx].src;
+            incomingImage.alt = pfpData[incomingIdx].alt;
+
+            if (prefersReducedMotion) {
+                assignCarouselSlots(direction);
+                centerIdx = nextCenterIdx;
+                updateCarousel(true);
+                return;
+            }
+
+            isAnimating = true;
+            incomingImage.className = `pfp-incoming pfp-enter-from-${direction > 0 ? 'right' : 'left'}`;
+            pfpContainer.classList.add('is-animating');
+
+            const slotWidth = pfpContainer.clientWidth / 3;
+            const shift = -direction * slotWidth;
+            const outgoing = direction > 0 ? pfpLeft : pfpRight;
+            const movingSide = direction > 0 ? pfpRight : pfpLeft;
+            const animations = [
+                outgoing.animate(
+                    [{ opacity: 0.5 }, { opacity: 0 }],
+                    { duration: 420, easing: 'ease', fill: 'forwards' }
+                ),
+                pfpCenter.animate(
+                    [
+                        { transform: 'scale(1)', opacity: 1 },
+                        { transform: `translateX(${shift}px) scale(0.75)`, opacity: 0.5 }
+                    ],
+                    { duration: 420, easing: 'ease', fill: 'forwards' }
+                ),
+                movingSide.animate(
+                    [
+                        { transform: 'scale(0.75)', opacity: 0.5 },
+                        { transform: `translateX(${shift}px) scale(1)`, opacity: 1 }
+                    ],
+                    { duration: 420, easing: 'ease', fill: 'forwards' }
+                ),
+                incomingImage.animate(
+                    [
+                        { transform: `translateX(${direction * slotWidth}px) scale(0.75)`, opacity: 0 },
+                        { transform: 'scale(0.75)', opacity: 0.5 }
+                    ],
+                    { duration: 420, easing: 'ease', fill: 'forwards' }
+                )
+            ];
+
+            let completed = false;
+            try {
+                await Promise.all(animations.map(animation => animation.finished));
+                assignCarouselSlots(direction);
+                centerIdx = nextCenterIdx;
+                pfpContainer.classList.remove('is-animating');
+                animations.forEach(animation => animation.cancel());
+                updateCarousel(true);
+                completed = true;
+            } finally {
+                if (!completed) {
+                    animations.forEach(animation => animation.cancel());
+                    incomingImage.className = 'pfp-incoming';
+                }
+                pfpContainer.classList.remove('is-animating');
+                isAnimating = false;
+            }
+        }
+
+        function handleCarouselRotation(direction) {
+            rotateCarousel(direction).catch(error => {
+                console.error('Unable to animate the profile picture carousel.', error);
+            });
+        }
+
         pfpContainer.addEventListener('wheel', (e) => {
             e.preventDefault();
-            if (e.deltaY > 0) {
-                centerIdx = (centerIdx + 1) % pfpData.length;
-            } else {
-                centerIdx = (centerIdx - 1 + pfpData.length) % pfpData.length;
+            const direction = Math.sign(e.deltaY);
+            if (direction !== 0) {
+                handleCarouselRotation(direction);
             }
-            updateCarousel(true);
         });
 
-        // --- Profile Picture Redirect Logic ---
-pfpLeft.addEventListener('click', () => {
-    const leftIdx = (centerIdx + pfpData.length - 1) % pfpData.length;
-    window.location.href = pfpData[leftIdx].url;
-});
+        pfpContainer.addEventListener('pointerdown', (e) => {
+            if (e.pointerType === 'touch' || e.pointerType === 'pen') {
+                pointerStart = { x: e.clientX, y: e.clientY };
+            }
+        });
 
-pfpCenter.addEventListener('click', () => {
-    window.location.href = pfpData[centerIdx].url;
-});
+        document.addEventListener('pointerup', (e) => {
+            if (!pointerStart) return;
 
-pfpRight.addEventListener('click', () => {
-    const rightIdx = (centerIdx + 1) % pfpData.length;
-    window.location.href = pfpData[rightIdx].url;
-});
+            const deltaX = e.clientX - pointerStart.x;
+            const deltaY = e.clientY - pointerStart.y;
+            pointerStart = null;
 
+            if (Math.abs(deltaX) > 40 && Math.abs(deltaX) > Math.abs(deltaY)) {
+                ignoreCarouselClickUntil = performance.now() + 500;
+                handleCarouselRotation(deltaX < 0 ? 1 : -1);
+            }
+        });
+
+        document.addEventListener('pointercancel', () => {
+            pointerStart = null;
+        });
+
+        pfpContainer.addEventListener('click', (e) => {
+            if (
+                isAnimating ||
+                performance.now() < ignoreCarouselClickUntil ||
+                !(e.target instanceof HTMLImageElement) ||
+                e.target.classList.contains('pfp-incoming')
+            ) {
+                return;
+            }
+            window.location.href = pfpData[Number(e.target.dataset.index)].url;
+        });
 
         // --- Environmental Setup (Local file tag) ---
         if (window.location.protocol === 'file:') {
