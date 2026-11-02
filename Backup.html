@@ -72,6 +72,8 @@
             height: 100%;
             object-fit: cover;
             object-position: center 45%;
+            -webkit-user-drag: none;
+            user-select: none;
         }
 
         .profile-banner::after {
@@ -183,6 +185,7 @@
             object-fit: cover;
             filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.45));
             z-index: 1;
+            -webkit-user-drag: none;
         }
 
         .pfp-left {
@@ -242,6 +245,83 @@
             justify-content: center;
             align-items: center;
             gap: 8px;
+        }
+
+        .badge-section {
+            margin: -10px 0 25px;
+            padding: 10px;
+            border: 1px solid rgba(255, 133, 162, 0.28);
+            border-radius: 12px;
+            background: rgba(255, 228, 233, 0.42);
+        }
+
+        .badge-list {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: flex-start;
+            gap: 8px;
+        }
+
+        .badge-list img {
+            display: block;
+            width: 32px;
+            height: 32px;
+            object-fit: contain;
+            margin: 2px;
+            -webkit-user-drag: none;
+            user-select: none;
+        }
+
+        .badge-item {
+            position: relative;
+            display: block;
+        }
+
+        .badge-item:hover::after {
+            content: attr(data-hint);
+            position: absolute;
+            bottom: calc(100% + 8px);
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--text-main);
+            color: white;
+            padding: 6px 12px;
+            border-radius: 8px;
+            font-size: 0.75em;
+            font-weight: 400;
+            white-space: nowrap;
+            z-index: 10;
+            animation: fadeIn 0.2s ease;
+            pointer-events: none;
+        }
+
+        .badge-item:hover::before {
+            content: '';
+            position: absolute;
+            bottom: calc(100% + 2px);
+            left: 50%;
+            transform: translateX(-50%);
+            border: 6px solid transparent;
+            border-top-color: var(--text-main);
+            z-index: 10;
+            pointer-events: none;
+        }
+
+        inline-emoji {
+            display: inline-block;
+            width: 1.2em;
+            height: 1.2em;
+            vertical-align: -0.2em;
+            line-height: 1;
+        }
+
+        inline-emoji img {
+            display: block;
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            -webkit-user-drag: none;
+            user-select: none;
         }
 
         .stats-grid {
@@ -308,6 +388,11 @@
             border-radius: 15px;
             border-left: 4px solid var(--accent-pink);
             text-align: left;
+        }
+
+        .bio a {
+            color: inherit;
+            text-decoration: underline;
         }
 
         .social-links {
@@ -617,15 +702,15 @@
 
     <div class="container profile-container">
         <div class="profile-banner">
-            <img src="Files/Portifolio_Banner.png" alt="A cozy attic room with windows overlooking trees">
+            <img src="Files/Banner/Current/A.png" alt="A cozy attic room with windows overlooking trees" draggable="false">
         </div>
 
         <div class="profile-section">
             <div class="pfp-container" id="pfp-container" role="group" aria-label="Profile pictures. Scroll or swipe to browse, or select a picture to view the biography.">
-                <img class="pfp-left" src="" alt="">
-                <img class="pfp-center" src="" alt="">
-                <img class="pfp-right" src="" alt="">
-                <img class="pfp-incoming" src="" alt="" aria-hidden="true">
+                <img class="pfp-left" src="" alt="" draggable="false">
+                <img class="pfp-center" src="" alt="" draggable="false">
+                <img class="pfp-right" src="" alt="" draggable="false">
+                <img class="pfp-incoming" src="" alt="" aria-hidden="true" draggable="false">
             </div>
             <div class="swipe-cue" id="swipe-cue" aria-hidden="true">
                 <i class="fas fa-hand-pointer"></i>
@@ -637,19 +722,28 @@
         <h1>Flair Diva</h1>
 
         <div class="mic-status">
-            <i class="fas fa-microphone-slash"></i> <span>i don't have a working mic</span>
+            <i class="fas fa-microphone-slash"></i> <span>i don't like using my mic</span>
         </div>
 
         <div class="stats-grid">
-            <div class="stat-item">Name: Flair Diva</div>
+            <div class="stat-item">Pronouns: She/Her</div>
             <div class="stat-item" id="birthdate-item" data-hint="">Birthdate: 4 August 2009</div>
-            <div class="stat-item">Gender: Female</div>
+            <div class="stat-item">Gender: <inline-emoji src="Files/emojs/FemaleSighn.svg" alt="(EMOJI FAILED TO LOAD)"></inline-emoji>Female</div>
             <div class="stat-item">RS: single (not looking)</div>
         </div>
 
+        <section class="badge-section" aria-label="Badges">
+            <div class="badge-list">
+                <!-- Add badges by copying an image line and changing its file and description. -->
+                <img src="Files/Badges/Tf.svg" alt="Trans-Feminine" draggable="false">
+                <img src="Files/Badges/Eng.svg" alt="Can Speak English" draggable="false">
+                <img src="Files/Badges/NL.svg" alt="Can Speak Dutch" draggable="false">
+            </div>
+        </section>
+
         <div class="bio">
             My hobbies include <strong>Drawing</strong> and <strong>Animal Care</strong>. I am currently a volunteer for
-            <strong>PSS</strong>.
+            <a href="https://plasmastarstudios.com"><strong>PSS</strong></a>.
             My favorite color is <strong>Pink</strong>.
             <br><br>
             <small><em>Note: I often don't want to share media due to past and mutual bad experiences.</em></small>
@@ -697,7 +791,51 @@
         </div>
     </div>
 
+
+
+    <div class="container">
+        <h1>Library</h1>
+        <h3>a collection of the steam games i own</h3>
+    </div>
+
     <script>
+        document.querySelectorAll('.badge-list img[alt]').forEach((badge) => {
+            const badgeItem = document.createElement('span');
+            badgeItem.className = 'badge-item';
+            badgeItem.dataset.hint = badge.alt;
+            badge.before(badgeItem);
+            badgeItem.append(badge);
+        });
+
+        document.querySelectorAll('inline-emoji[src]').forEach((emoji) => {
+            const image = document.createElement('img');
+            image.src = emoji.getAttribute('src');
+            image.alt = '';
+            image.draggable = false;
+            image.setAttribute('aria-hidden', 'true');
+            emoji.replaceChildren(image);
+
+            const description = emoji.getAttribute('alt');
+            if (description) {
+                emoji.setAttribute('role', 'img');
+                emoji.setAttribute('aria-label', description);
+            } else {
+                emoji.setAttribute('aria-hidden', 'true');
+            }
+        });
+
+        const protectedImageSelector = '.profile-banner img, .pfp-container img, .badge-list img, inline-emoji img';
+        document.addEventListener('dragstart', (event) => {
+            if (event.target instanceof HTMLImageElement && event.target.matches(protectedImageSelector)) {
+                event.preventDefault();
+            }
+        });
+        document.addEventListener('contextmenu', (event) => {
+            if (event.target instanceof HTMLImageElement && event.target.matches(protectedImageSelector)) {
+                event.preventDefault();
+            }
+        });
+
         // --- Clock Logic ---
         const hHour = document.getElementById('h-hour');
         const hMin = document.getElementById('h-min');
