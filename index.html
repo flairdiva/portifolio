@@ -42,29 +42,7 @@
             margin: 0;
         }
 
-        body[data-season="christmas"] {
-            background:
-                radial-gradient(ellipse at 10% 12%, rgba(196, 226, 255, 0.72), transparent 36%),
-                linear-gradient(145deg, #eaf5ff, #f8fbff 48%, #eaf6f0);
-        }
-
-        body[data-season="halloween"] {
-            background:
-                radial-gradient(ellipse at 12% 18%, rgba(255, 144, 48, 0.22), transparent 34%),
-                radial-gradient(ellipse at 88% 78%, rgba(123, 51, 154, 0.2), transparent 38%),
-                linear-gradient(145deg, #21152b, #382039 52%, #201b31);
-            color: #f7e9d8;
-        }
-
-        body[data-season="easter"] {
-            background:
-                radial-gradient(ellipse at 12% 14%, rgba(255, 207, 224, 0.8), transparent 36%),
-                radial-gradient(ellipse at 88% 82%, rgba(201, 240, 200, 0.78), transparent 38%),
-                linear-gradient(145deg, #fff5f7, #f5fbef);
-        }
-
         .container {
-            position: relative;
             background: var(--card-bg);
             width: 100%;
             max-width: 680px;
@@ -76,168 +54,7 @@
             margin-bottom: 20px;
         }
 
-        body[data-season="christmas"] .container {
-            --card-bg: rgba(255, 255, 255, 0.94);
-            border: 1px solid rgba(151, 196, 230, 0.65);
-            box-shadow: 0 15px 40px rgba(34, 91, 126, 0.16);
-        }
-
-        body[data-season="halloween"] .container {
-            --card-bg: rgba(47, 33, 54, 0.96);
-            --text-main: #f7e9d8;
-            border: 1px solid rgba(255, 151, 57, 0.52);
-            box-shadow: 0 15px 42px rgba(12, 8, 20, 0.38);
-        }
-
-        body[data-season="easter"] .container {
-            --card-bg: rgba(255, 255, 255, 0.94);
-            border: 1px solid rgba(236, 174, 202, 0.65);
-            box-shadow: 0 15px 40px rgba(125, 102, 99, 0.15);
-        }
-
-        body[data-season="halloween"] .profile-banner::after {
-            background: linear-gradient(to bottom, transparent, var(--card-bg));
-        }
-
-        .seasonal-scene {
-            position: fixed;
-            inset: 0;
-            z-index: 10;
-            display: none;
-            overflow: hidden;
-            pointer-events: none;
-            user-select: none;
-        }
-
-        body[data-season="christmas"] .seasonal-scene,
-        body[data-season="halloween"] .seasonal-scene,
-        body[data-season="easter"] .seasonal-scene {
-            display: block;
-        }
-
-        .seasonal-weather {
-            position: absolute;
-            inset: -100% 0 0;
-            opacity: 0;
-        }
-
-        body[data-season="christmas"] .seasonal-weather {
-            opacity: 0.8;
-            background-image:
-                radial-gradient(3px 3px at 20px 30px, #fff 98%, transparent),
-                radial-gradient(2px 2px at 90px 80px, #fff 98%, transparent),
-                radial-gradient(4px 4px at 150px 20px, #fff 98%, transparent),
-                radial-gradient(2px 2px at 210px 110px, #fff 98%, transparent),
-                radial-gradient(3px 3px at 270px 55px, #fff 98%, transparent);
-            background-size: 300px 150px;
-            animation: seasonal-fall 12s linear infinite;
-        }
-
-        body[data-season="christmas"] .seasonal-weather:nth-child(2) {
-            opacity: 0.55;
-            background-position: 70px 20px;
-            background-size: 230px 120px;
-            animation-duration: 18s;
-            animation-direction: reverse;
-        }
-
-        body[data-season="halloween"] .seasonal-weather {
-            opacity: 0.8;
-            background-image:
-                radial-gradient(2px 2px at 30px 35px, rgba(255, 168, 74, 0.9) 98%, transparent),
-                radial-gradient(3px 3px at 140px 90px, rgba(178, 112, 220, 0.8) 98%, transparent),
-                radial-gradient(2px 2px at 250px 40px, rgba(255, 220, 166, 0.9) 98%, transparent);
-            background-size: 300px 160px;
-            animation: seasonal-fall 16s linear infinite;
-        }
-
-        body[data-season="easter"] .seasonal-weather {
-            opacity: 0.7;
-            background-image:
-                radial-gradient(4px 4px at 35px 40px, rgba(255, 190, 211, 0.95) 98%, transparent),
-                radial-gradient(3px 3px at 120px 95px, rgba(255, 234, 151, 0.95) 98%, transparent),
-                radial-gradient(4px 4px at 230px 25px, rgba(180, 221, 175, 0.95) 98%, transparent);
-            background-size: 280px 140px;
-            animation: seasonal-fall 20s linear infinite;
-        }
-
-        .seasonal-accent {
-            position: absolute;
-            bottom: 12px;
-            font-size: clamp(2.5rem, 7vw, 5rem);
-            line-height: 1;
-            filter: drop-shadow(0 5px 8px rgba(0, 0, 0, 0.24));
-            animation: seasonal-float 4s ease-in-out infinite;
-        }
-
-        .seasonal-accent-left {
-            left: 18px;
-        }
-
-        .seasonal-accent-right {
-            right: 18px;
-            animation-delay: -2s;
-        }
-
-        body[data-season="christmas"] .seasonal-accent-left::before {
-            content: "🎄";
-        }
-
-        body[data-season="christmas"] .seasonal-accent-right::before {
-            content: "🎁";
-        }
-
-        body[data-season="halloween"] .seasonal-accent-left::before {
-            content: "🎃";
-        }
-
-        body[data-season="halloween"] .seasonal-accent-right::before {
-            content: "🎃";
-        }
-
-        body[data-season="easter"] .seasonal-accent-left::before {
-            content: "🐰";
-        }
-
-        body[data-season="easter"] .seasonal-accent-right::before {
-            content: "🪺";
-        }
-
-        @keyframes seasonal-fall {
-            from { transform: translateY(0); }
-            to { transform: translateY(100vh); }
-        }
-
-        @keyframes seasonal-float {
-            0%, 100% { transform: translateY(0) rotate(-3deg); }
-            50% { transform: translateY(-12px) rotate(3deg); }
-        }
-
-        @media (max-width: 700px) {
-            .seasonal-accent {
-                bottom: 6px;
-                font-size: 2.5rem;
-                opacity: 0.78;
-            }
-
-            .seasonal-accent-left {
-                left: 4px;
-            }
-
-            .seasonal-accent-right {
-                right: 4px;
-            }
-        }
-
-        @media (prefers-reduced-motion: reduce) {
-            .seasonal-weather,
-            .seasonal-accent {
-                animation: none;
-            }
-        }
-
         .profile-container {
-            position: relative;
             overflow: hidden;
             padding: 0 40px 40px;
         }
@@ -798,13 +615,6 @@
 
 <body>
 
-    <div class="seasonal-scene" aria-hidden="true">
-        <div class="seasonal-weather"></div>
-        <div class="seasonal-weather"></div>
-        <span class="seasonal-accent seasonal-accent-left"></span>
-        <span class="seasonal-accent seasonal-accent-right"></span>
-    </div>
-
     <div class="container profile-container">
         <div class="profile-banner">
             <img src="Files/Portifolio_Banner.png" alt="A cozy attic room with windows overlooking trees">
@@ -929,14 +739,6 @@
 
         // --- PFP Carousel & Age Logic ---
         const birthDateString = "2009-08-04";
-
-        // Set to "christmas", "halloween", "easter", or "none" to theme the entire page.
-        const activeSeason = "none";
-        const availableSeasons = ["none", "christmas", "halloween", "easter"];
-        if (!availableSeasons.includes(activeSeason)) {
-            throw new Error(`Unknown seasonal decoration: ${activeSeason}`);
-        }
-        document.body.dataset.season = activeSeason;
 
         // Add each profile picture here; mark exactly one entry as the startup default.
         const pfpData = [
