@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Biography</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --bg-color: #fffafa;
+            --card-bg: #ffffff;
+            --accent-pink: #ff85a2;
+            --light-pink: #ffe4e9;
+            --text-main: #4a4a4a;
+        }
+
+        body {
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 40px 20px;
+            margin: 0;
+        }
+
+        .container {
+            background: var(--card-bg);
+            width: 100%;
+            max-width: 600px;
+            padding: 40px;
+            border-radius: 30px;
+            box-shadow: 0 15px 35px rgba(255, 133, 162, 0.1);
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .profile-section {
+            position: relative;
+            height: 180px;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .pfp-popup {
+            position: absolute;
+            bottom: 15px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 100;
+            margin: 0;
+            font-size: 1em;
+            color: var(--accent-pink);
+            font-weight: bold;
+            background: var(--light-pink);
+            border-radius: 20px;
+            padding: 4px 14px;
+            width: max-content;
+            text-align: center;
+            box-shadow: 0 4px 10px rgba(255, 133, 162, 0.3);
+            pointer-events: none;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.2s ease, visibility 0.2s ease;
+        }
+
+        .pfp-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 0;
+            width: 390px;
+            height: 130px;
+            margin: 0 auto;
+            transition: all 0.3s ease;
+        }
+
+        .pfp-container img {
+            width: 130px;
+            height: 130px;
+            border-radius: 50%;
+            border: 5px solid var(--light-pink);
+            object-fit: cover;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 20px rgba(255, 133, 162, 0.2);
+            z-index: 1;
+            cursor: pointer;
+        }
+
+        .pfp-single-container {
+            display: flex;
+            justify-content: center; /* Centers images horizontally */
+            align-items: center;     /* Centers images vertically */
+            gap: 20px;               /* Space between the images */
+            margin: 15px auto;
+        }
+
+        /* Style for individual single circular images */
+        .pfp-single {
+            width: 130px;
+            height: 130px;
+            border-radius: 50%;
+            border: 5px solid var(--light-pink);
+            object-fit: cover;
+            box-shadow: 0 8px 20px rgba(255, 133, 162, 0.2);
+            transition: transform 0.2s ease;
+        }
+
+        .pfp-left {
+            opacity: 0.5;
+            transform: scale(0.75);
+        }
+
+        .pfp-center {
+            opacity: 1;
+            transform: scale(1);
+            z-index: 2;
+        }
+
+        .pfp-right {
+            opacity: 0.5;
+            transform: scale(0.75);
+        }
+
+        h1 {
+            margin: 10px 0;
+            color: var(--accent-pink);
+            font-size: 2.2em;
+        }
+
+        .social-links {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 20px;
+            margin: 25px 0;
+        }
+
+        .social-links a {
+            color: var(--accent-pink);
+            font-size: 1.8em;
+            transition: transform 0.2s;
+            display: flex;
+            align-items: center;
+        }
+
+        .social-links img.roblox-icon {
+            width: 28px;
+            height: 28px;
+        }
+
+        a {
+            color: var(--accent-pink);
+            text-decoration: none;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="header">
+            <a href="../index.html" class="btn-back"><i class="fas fa-arrow-left"></i> Back to Profile</a>
+            <h1>Biography</h1>
+            <p>Character Design and info (this page shows how i look in diffrent games)</p>
+            <div class="container" style="width: auto; background: #f7d0d0;">
+            <h1>Basics</h1>
+            <ul>
+                <li>Brown Long/Mid Hair</li>
+                <li>Blue Eyes (if possible)</li>
+                <li>a either black or white hair bow (if possible)</li>
+            </ul>
+            </div>
+        </div>
+
+        <div class="container" style="width: auto; background: #fce3e3;">
+            <h1>Drawn Variants</h1>
+            <p>my oc drawing, mostly used for all profile pictures</p>
+            <div class="profile-section" id="carousel-drawn"></div>
+        </div>
+
+        <div class="container" style="width: auto; background: #fce3e3;">
+            <h1>Roblox Avatars</h1>
+            <p>All my Characters i have for the platform Roblox</p>
+            <div class="profile-section" id="carousel-roblox"></div>
+        </div>
+
+        <div class="container" style="width: auto; background: #fce3e3;">
+            <h1>Minecraft Skins</h1>
+            <p>The Skin I heave In Minecraft</p>
+            <img class="pfp-single" src="./Files/Mc/Main.gif" alt="Minecraft Main">
+        </div>
+
+        <div class="container" style="width: auto; background: #fce3e3;">
+            <h1>Gta online</h1>
+            <p>The Skin Variants I heave In GTA Online</p>
+            
+            <div class="pfp-single-container">
+                <img class="pfp-single" src="./Files/GTA5/Summer.png" alt="Minecraft Main 1">
+                <img class="pfp-single" src="./Files/GTA5/Winter.png" alt="Minecraft Main 2">
+            </div>
+        </div>
+
+        <div class="container" style="width: auto; background: #fce3e3;">
+            <h1>Gather.town</h1>
+            <p>How i look in Gather</p>
+            <img class="pfp-single" src="./Files/Gather/Main.png" alt="Minecraft Main">
+        </div>
+
+        <!-- <div class="container" style="width: auto; background: #fce3e3;">
+            <h1>Minecraft Skins</h1>
+            <p>My custom Minecraft outfits</p>
+            <div class="profile-section" id="carousel-minecraft"></div>
+        </div> -->
+
+        <div class="footer">
+            <div class="social-links">
+                <a href="https://discord.gg/nUtvz4kK5x" target="_blank"><i class="fab fa-discord"></i></a>
+                <a href="https://www.roblox.com/users/3969064026/profile" target="_blank">
+                    <img src="https://flairdiva.github.io/me/Files/CustomRobloxIcon.png" class="roblox-icon" alt="Roblox">
+                </a>
+                <a href="https://steamcommunity.com/profiles/76561199861712823/" target="_blank"><i class="fab fa-steam"></i></a>
+                <a href="https://github.com/flairdiva" target="_blank"><i class="fab fa-github"></i></a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        if (window.location.protocol === 'file:') {
+            document.title = "★ " + document.title;
+        }
+
+        // ==========================================
+        // 1. CAROUSEL CONFIGURATION DATA
+        // ==========================================
+        // Simply match the ID in HTML (e.g. id="carousel-drawn") with the key here!
+        const carouselsConfig = {
+            "carousel-drawn": [
+                { src: "Files/Drawings/Winter.png", alt: "Winter Version" },
+                { src: "Files/Drawings/PFPNeutral.png", alt: "Default Version" },
+                { src: "Files/Drawings/PFPSummer.png", alt: "Summer Version" }
+            ],
+
+            "carousel-roblox": [
+                { src: "Files/RBX/AC_Summer.png", alt: "Astral Summer Variant" },
+                { src: "Files/RBX/Summer_C.png", alt: "Summer_C" },
+                { src: "Files/RBX/Summer_A.png", alt: "Summer_A" },
+                { src: "Files/RBX/IS_Training_Uniform.png", alt: "innovation Security Uniform" },
+                { src: "Files/RBX/Main_WhiteBow.png", alt: "Main (whiteBow)" },
+                { src: "Files/RBX/Party_Version.png", alt: "Party/Special Version" },
+                { src: "Files/RBX/Alternative_Main.png", alt: "Alternative main" },
+                { src: "Files/RBX/AC_2025_Constelation.png", alt: "Astral Central 2025 [Constelation]" }
+            ],
+
+            // Add new carousels here whenever you want!
+            "carousel-minecraft": [
+                { src: "Files/PFPNeutral.png", alt: "Default Minecraft Skin" },
+                { src: "Files/PFPSummer.png", alt: "Summer Skin" }
+            ]
+        };
+
+        // ==========================================
+        // 2. AUTOMATIC CAROUSEL ENGINE
+        // ==========================================
+        function setupCarousel(sectionId, items) {
+            const section = document.getElementById(sectionId);
+            if (!section || !items || items.length === 0) return;
+
+            // Build inner HTML structure dynamically
+            section.innerHTML = `
+                <div class="pfp-container">
+                    <img class="pfp-left" src="" alt="">
+                    <img class="pfp-center" src="" alt="">
+                    <img class="pfp-right" src="" alt="">
+                </div>
+                <div class="pfp-popup"></div>
+            `;
+
+            const pfpLeft = section.querySelector('.pfp-left');
+            const pfpCenter = section.querySelector('.pfp-center');
+            const pfpRight = section.querySelector('.pfp-right');
+            const pfpContainer = section.querySelector('.pfp-container');
+            const pfpPopup = section.querySelector('.pfp-popup');
+
+            let centerIdx = 0;
+            let popupTimeout = null;
+
+            function showPopup(text) {
+                if (!pfpPopup) return;
+                pfpPopup.textContent = text;
+                pfpPopup.style.visibility = 'visible';
+                pfpPopup.style.opacity = '1';
+                if (popupTimeout) clearTimeout(popupTimeout);
+                popupTimeout = setTimeout(() => {
+                    pfpPopup.style.opacity = '0';
+                    pfpPopup.style.visibility = 'hidden';
+                }, 2000);
+            }
+
+            function render(showPopupMsg = false) {
+                const len = items.length;
+
+                // Handle lists with 1 or 2 items cleanly
+                const leftIdx = (centerIdx - 1 + len) % len;
+                const rightIdx = (centerIdx + 1) % len;
+
+                pfpLeft.src = items[leftIdx].src;
+                pfpLeft.alt = items[leftIdx].alt;
+
+                pfpCenter.src = items[centerIdx].src;
+                pfpCenter.alt = items[centerIdx].alt;
+
+                pfpRight.src = items[rightIdx].src;
+                pfpRight.alt = items[rightIdx].alt;
+
+                if (showPopupMsg && items[centerIdx].alt) {
+                    showPopup(items[centerIdx].alt);
+                }
+            }
+
+            pfpContainer.addEventListener('wheel', (e) => {
+                e.preventDefault();
+                const len = items.length;
+                if (e.deltaY > 0) {
+                    centerIdx = (centerIdx + 1) % len;
+                } else {
+                    centerIdx = (centerIdx - 1 + len) % len;
+                }
+                render(true);
+            });
+
+            render(false);
+        }
+
+        // Loop through all defined carousels and initialize them automatically
+        Object.keys(carouselsConfig).forEach(id => {
+            setupCarousel(id, carouselsConfig[id]);
+        });
+    </script>
+</body>
+
+</html>

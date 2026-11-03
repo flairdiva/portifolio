@@ -1,0 +1,677 @@
+<!-- Version 0.0.1 -->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="google-site-verification" content="APvq1wGZ99gQOPp2ACDg5YjNtmMlE4rEqawT42eHuPU" />
+
+    <meta name="title" content="FlairDiva">
+    <meta name="description" content="A personal portfolio page for Flair Diva listing interests, creative work, and social profile links.">
+    <meta name="theme-color" content="#ff85a2">
+
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://flairdiva.github.io/me/">
+    <meta property="og:title" content="FlairDiva">
+    <meta property="og:description" content="This is my personal portfolio page. I share information about myself, my art, and my social profiles.">
+    <meta property="og:image" content="https://flairdiva.github.io/me/Files/z236aQAAAAZJREFUAwDU1V2Df21tQAAAABJRU5ErkJggg.png">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://flairdiva.github.io/me/">
+
+    <title>Flair Diva | Personal Portfolio</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --bg-color: #fffafa;
+            --card-bg: #ffffff;
+            --accent-pink: #ff85a2;
+            --light-pink: #ffe4e9;
+            --text-main: #4a4a4a;
+        }
+
+        body {
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 40px 20px;
+            margin: 0;
+        }
+
+        .container {
+            background: var(--card-bg);
+            width: 100%;
+            max-width: 600px;
+            padding: 40px;
+            border-radius: 30px;
+            box-shadow: 0 15px 35px rgba(255, 133, 162, 0.1);
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .profile-section {
+            position: relative;
+            /* This is the anchor for the popup */
+            height: 180px;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        #pfp-popup {
+            position: absolute;
+            /* Move it up! 15px from the bottom of the profile-section 
+       places it right at the base of the center circle */
+            bottom: 15px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 100;
+            /* High z-index so it stays on top of everything */
+
+            /* Styling */
+            margin: 0;
+            font-size: 1em;
+            /* Slightly smaller to look cleaner as a tag */
+            color: var(--accent-pink);
+            font-weight: bold;
+            background: var(--light-pink);
+            border-radius: 20px;
+            /* Rounder edges for a "tag" look */
+            padding: 4px 14px;
+            width: max-content;
+            text-align: center;
+            box-shadow: 0 4px 10px rgba(255, 133, 162, 0.3);
+            pointer-events: none;
+            /* Prevents the popup from blocking mouse/scroll events */
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.2s ease, visibility 0.2s ease;
+        }
+
+
+        .pfp-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 0;
+            width: 390px;
+            height: 130px;
+            margin: 0 auto;
+            transition: all 0.3s ease;
+        }
+
+        .pfp-container img {
+            width: 130px;
+            height: 130px;
+            border-radius: 50%;
+            border: 5px solid var(--light-pink);
+            object-fit: cover;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 20px rgba(255, 133, 162, 0.2);
+            z-index: 1;
+        }
+
+        .pfp-left {
+            opacity: 0.5;
+            transform: scale(0.75);
+        }
+
+        .pfp-center {
+            opacity: 1;
+            transform: scale(1);
+            z-index: 2;
+        }
+
+        .pfp-right {
+            opacity: 0.5;
+            transform: scale(0.75);
+        }
+
+        /* Hide images not in use for carousel effect */
+        .pfp-hidden {
+            opacity: 0;
+            pointer-events: none;
+            transform: scale(0.6);
+        }
+
+        .pfp-hint {
+            font-size: 0.7em;
+            color: #d1a7b0;
+            margin-top: 5px;
+        }
+
+        h1 {
+            margin: 10px 0;
+            color: var(--accent-pink);
+            font-size: 2.2em;
+        }
+
+        .mic-status {
+            font-size: 1em;
+            color: #d1a7b0;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-bottom: 25px;
+        }
+
+        .stat-item {
+            background: var(--light-pink);
+            padding: 10px;
+            border-radius: 12px;
+            font-size: 0.9em;
+            font-weight: 600;
+            position: relative;
+            cursor: default;
+        }
+
+        .stat-item[data-hint]:hover::after {
+            content: attr(data-hint);
+            position: absolute;
+            bottom: calc(100% + 8px);
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--text-main);
+            color: white;
+            padding: 6px 12px;
+            border-radius: 8px;
+            font-size: 0.75em;
+            font-weight: 400;
+            white-space: nowrap;
+            z-index: 10;
+            animation: fadeIn 0.2s ease;
+        }
+
+        .stat-item[data-hint]:hover::before {
+            content: '';
+            position: absolute;
+            bottom: calc(100% + 2px);
+            left: 50%;
+            transform: translateX(-50%);
+            border: 6px solid transparent;
+            border-top-color: var(--text-main);
+            z-index: 10;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateX(-50%) translateY(4px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateX(-50%) translateY(0);
+            }
+        }
+
+        .bio {
+            line-height: 1.7;
+            margin: 25px 0;
+            background: #fffcfc;
+            padding: 20px;
+            border-radius: 15px;
+            border-left: 4px solid var(--accent-pink);
+            text-align: left;
+        }
+
+        .social-links {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 20px;
+            margin: 25px 0;
+        }
+
+        .social-links a {
+            color: var(--accent-pink);
+            font-size: 1.8em;
+            transition: transform 0.2s;
+            display: flex;
+            align-items: center;
+        }
+
+        .social-links img.roblox-icon {
+            width: 28px;
+            height: 28px;
+            /* filter: sepia(1) saturate(5) hue-rotate(310deg); /* Adjusts the PNG to match your pink theme */
+        }
+
+        .social-links a:hover {
+            transform: translateY(-3px);
+        }
+
+        .btn-work {
+            background: var(--accent-pink);
+            color: white;
+            padding: 12px 30px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: bold;
+            display: inline-block;
+            margin-bottom: 40px;
+            transition: opacity 0.2s;
+        }
+
+        .btn-work:hover {
+            opacity: 0.9;
+        }
+
+        .section-title {
+            text-align: left;
+            border-bottom: 2px solid var(--light-pink);
+            padding-bottom: 5px;
+            margin-bottom: 15px;
+            font-size: 1.2em;
+            color: var(--accent-pink);
+            font-weight: bold;
+        }
+
+        .game-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .game-card {
+            position: relative;
+            aspect-ratio: 2 / 3;
+            border-radius: 10px;
+            overflow: hidden;
+            background: #f0f0f0;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .game-card img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .game-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 133, 162, 0.9);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.85em;
+            font-weight: bold;
+            padding: 10px;
+            text-align: center;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .game-card:hover .game-overlay {
+            opacity: 1;
+        }
+
+        .game-content {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            font-weight: bold;
+            padding: 18px;
+            color: var(--text-main);
+            background: linear-gradient(180deg, #fffafa 0%, #ffe4e9 100%);
+        }
+
+        .disclaimer {
+            background: #fff6f8;
+            color: #6b2f45;
+            border: 1px solid #ffd4df;
+            border-radius: 14px;
+            padding: 14px 18px;
+            margin: 20px 0;
+            font-size: 0.95em;
+            text-align: left;
+            line-height: 1.6;
+        }
+
+        a {
+            color: var(--accent-pink);
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+    </style>
+
+    <!-- CLOCK STYLES -->
+     <style>
+        /* Compact Timezone Layout */
+        .timezone-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 15px;
+            margin-bottom: 20px;
+            padding: 5px 10px;
+            background: #fffcfc;
+            border-radius: 20px;
+            border: 1px solid var(--light-pink);
+        }
+
+        .timezone-info {
+            text-align: left;
+        }
+
+        .timezone-info h2 {
+            margin: 0;
+            font-size: 1.3em;
+            color: var(--accent-pink);
+        }
+
+        .timezone-sub {
+            font-size: 0.8em;
+            color: #d1a7b0;
+        }
+
+        /* Hybrid Compact Clock */
+        .hybrid-clock {
+            position: relative;
+            width: 70px;
+            height: 70px;
+            border: 2px solid var(--light-pink);
+            border-radius: 50%;
+            background: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            box-shadow: 0 4px 10px rgba(255, 133, 162, 0.05);
+        }
+
+        .hybrid-hand {
+            position: absolute;
+            width: 50%;
+            top: 50%;
+            transform-origin: 100%;
+            height: 2px;
+            border-radius: 2px;
+        }
+
+        .h-hour {
+            width: 25%;
+            left: 25%;
+            background: var(--text-main);
+            height: 3px;
+        }
+
+        .h-min {
+            width: 35%;
+            left: 15%;
+            background: #8a8a8a;
+        }
+
+        .h-sec {
+            width: 38%;
+            left: 12%;
+            background: var(--accent-pink);
+            height: 1px;
+        }
+
+        /* Small digital overlay in the center background */
+        .hybrid-digital {
+            position: absolute;
+            font-size: 0.8em;
+            font-weight: bold;
+            color: var(--text-main);
+            z-index: 5;
+            background: rgba(255, 254, 254, 0.85);
+            padding: 2px 4px;
+            border-radius: 4px;
+            font-family: monospace;
+        }
+
+        .schedule-box h1 {
+            font-size: 1.6em;
+            margin: 15px 0 10px 0;
+            text-align: left;
+        }
+    </style>
+</head>
+
+<body> 
+
+    <div class="container">
+        <div class="profile-section">
+            <div class="pfp-container" id="pfp-container">
+                <img class="pfp-left" id="pfp-left" src="" alt="">
+                <img class="pfp-center" id="pfp-center" src="" alt="">
+                <img class="pfp-right" id="pfp-right" src="" alt="">
+            </div>
+            <div id="pfp-popup"></div>
+        </div>
+        <!-- .pfp-hint removed as requested -->
+
+        <h1>Flair Diva</h1>
+
+        <div class="mic-status">
+            <i class="fas fa-microphone-slash"></i> <span>i don't have a working mic</span>
+        </div>
+
+        <div class="stats-grid">
+            <div class="stat-item">Name: Flair Diva</div>
+            <div class="stat-item" id="birthdate-item" data-hint="">Birthdate: 4 August 2009</div>
+            <div class="stat-item">Gender: Female</div>
+            <div class="stat-item">RS: single (not looking)</div>
+            <!-- <div class="stat-item" style="grid-column: span 2;">Empty</div> -->
+        </div>
+
+        <div class="bio">
+            My hobbies include <strong>Drawing</strong> and <strong>Animal Care</strong>. I am currently a volunteer for
+            <strong>PSS</strong>.
+            My favorite color is <strong>Pink</strong>.
+            <br><br>
+            <small><em>Note: I often don't want to share media due to past and mutual bad experiences.</em></small>
+        </div>
+
+        
+
+        <div class="disclaimer">
+            This is a personal portfolio page for Flair Diva. It is not affiliated with Discord, Roblox, Steam, or
+            GitHub. The links below are personal profiles only.
+        </div>
+
+        <div class="social-links">
+            <a href="https://www.roblox.com/users/3969064026/profile" target="_blank" rel="noopener noreferrer" title="Roblox">
+                <img src="https://flairdiva.github.io/me/Files/CustomRobloxIcon.png" class="roblox-icon" alt="Roblox">
+            </a>
+            <a href="https://steamcommunity.com/profiles/76561199861712823/" target="_blank" rel="noopener noreferrer" title="Steam"><i
+                    class="fab fa-steam"></i></a>
+            <a href="https://github.com/flairdiva" target="_blank" rel="noopener noreferrer" title="GitHub"><i class="fab fa-github"></i></a>
+        </div>
+
+        <a href="my-work/index.html" class="btn-work">My Activity</a>
+    </div>
+
+    <div class="container">
+        
+            <h1>Timezone</h1>
+        <div class="timezone-row">
+            <div class="timezone-info">
+                <h2>My Time is</h2>
+                <div class="timezone-sub" id="tz-string">CET / CEST</div>
+            </div>
+            
+            <div class="hybrid-clock">
+                <div class="hybrid-digital" id="mini-digital">00:00</div>
+                <div class="hybrid-hand h-hour" id="h-hour"></div>
+                <div class="hybrid-hand h-min" id="h-min"></div>
+                <div class="hybrid-hand h-sec" id="h-sec"></div>
+            </div>
+        </div>
+
+        <div class="schedule-box">
+            <h1>My Schedule</h1>
+            <iframe src="https://teamup.com/ksuiauf8q79824qar1?tz=Europe%2FAmsterdam&showHeader=0&showProfileAndInfo=0&disableSidepanel=1&showViewSelector=0&showMenu=0&showViewHeader=1&showAgendaDetails=0&showDateControls=0&showDateRange=0" style="width: 100%; height: 300px" loading="lazy" frameborder="0"></iframe>
+        </div>
+    </div>
+
+ <!-- time scripts -->
+<script>
+        const hHour = document.getElementById('h-hour');
+        const hMin = document.getElementById('h-min');
+        const hSec = document.getElementById('h-sec');
+        const miniDigital = document.getElementById('mini-digital');
+        const tzString = document.getElementById('tz-string');
+
+        function updateClock() {
+            const now = new Date();
+            // Automatically adapts to Amsterdam's exact seasonal changes
+            const amsTime = new Date(now.toLocaleString("en-US", {timeZone: "Europe/Amsterdam"}));
+
+            const hours = amsTime.getHours();
+            const minutes = amsTime.getMinutes();
+            const seconds = amsTime.getSeconds();
+
+            // Calculate rotations (+90 to line up with default CSS right-pointing origins)
+            const hrDeg = ((hours / 12) * 360) + ((minutes / 60) * 30) + 90;
+            const minDeg = ((minutes / 60) * 360) + ((seconds / 60) * 6) + 90;
+            const secDeg = ((seconds / 60) * 360) + 90;
+
+            hHour.style.transform = `rotate(${hrDeg}deg)`;
+            hMin.style.transform = `rotate(${minDeg}deg)`;
+            hSec.style.transform = `rotate(${secDeg}deg)`;
+
+            // Compact Digital Format (HH:MM)
+            const displayHours = String(hours).padStart(2, '0');
+            const displayMins = String(minutes).padStart(2, '0');
+            miniDigital.textContent = `${displayHours}:${displayMins}`;
+
+            // Check if standard or daylight time is active to update text perfectly
+            const baseStr = now.toLocaleString("en-US", { timeZone: "Europe/Amsterdam", timeZoneName: "short" });
+            if (baseStr.includes("GMT+2") || baseStr.includes("CEST")) {
+                tzString.textContent = "Amsterdam (Summer Time - CEST)";
+            } else {
+                tzString.textContent = "Amsterdam (Winter Time - CET)";
+            }
+        }
+
+        setInterval(updateClock, 1000);
+        updateClock();
+    </script>
+
+
+<!-- REGULAR SCRIPTS -->
+
+
+
+
+    <script>
+        // --- Configuration ---
+        const birthDateString = "2009-08-04"; // Format: YYYY-MM-DD | 2009-08-04
+        // ---------------------
+
+        // True carousel logic
+        const pfpData = [
+            { src: "Files/PFPparty_version.png", alt: "Party/Special Version" },
+            { src: "Files/PFPNeutral.png", alt: "Default Version" },
+            { src: "Files/PFPSummer.png", alt: "Summer Version" }
+        ];
+
+        let centerIdx = 1;
+        const pfpLeft = document.getElementById('pfp-left');
+        const pfpCenter = document.getElementById('pfp-center');
+        const pfpRight = document.getElementById('pfp-right');
+        const pfpContainer = document.getElementById('pfp-container');
+        const pfpNames = ["Party/Special Version", "Default Version", "Summer Version"];
+        const pfpPopup = document.getElementById('pfp-popup');
+        let popupTimeout = null;
+
+        // Age Calculation Logic
+        function calculateAge(dob) {
+            const birthDate = new Date(dob);
+            const today = new Date();
+            let age = today.getFullYear() - birthDate.getFullYear();
+            const monthDiff = today.getMonth() - birthDate.getMonth();
+
+            // If the current month is before the birth month, 
+            // or it's the birth month but the day hasn't passed yet, subtract 1 year.
+            if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
+                age--;
+            }
+            return age;
+        }
+
+        // Set the hover hint for the birthdate item
+        const birthdateItem = document.getElementById('birthdate-item');
+        if (birthdateItem) {
+            const age = calculateAge(birthDateString);
+            birthdateItem.setAttribute('data-hint', `Age: ${age} years old`);
+        }
+
+        function showPfpPopup(name) {
+            pfpPopup.textContent = name;
+            pfpPopup.style.visibility = 'visible';
+            pfpPopup.style.opacity = '1';
+            if (popupTimeout) clearTimeout(popupTimeout);
+            popupTimeout = setTimeout(() => {
+                pfpPopup.style.opacity = '0';
+                pfpPopup.style.visibility = 'hidden';
+            }, 2000);
+        }
+
+        function updateCarousel(showPopup = false) {
+            const leftIdx = (centerIdx + pfpData.length - 1) % pfpData.length;
+            const rightIdx = (centerIdx + 1) % pfpData.length;
+
+            pfpLeft.src = pfpData[leftIdx].src;
+            pfpLeft.alt = pfpData[leftIdx].alt;
+            pfpCenter.src = pfpData[centerIdx].src;
+            pfpCenter.alt = pfpData[centerIdx].alt;
+            pfpRight.src = pfpData[rightIdx].src;
+            pfpRight.alt = pfpData[rightIdx].alt;
+
+            if (showPopup) showPfpPopup(pfpNames[centerIdx]);
+        }
+
+        updateCarousel(false);
+
+        pfpContainer.addEventListener('wheel', (e) => {
+            e.preventDefault();
+            if (e.deltaY > 0) {
+                centerIdx = (centerIdx + 1) % pfpData.length;
+            } else {
+                centerIdx = (centerIdx - 1 + pfpData.length) % pfpData.length;
+            }
+            updateCarousel(true);
+        });
+    </script>
+
+    <script>
+    // Check if the page is opened as a local file
+    if (window.location.protocol === 'file:') {
+        // Add a star to the beginning of the existing title
+        document.title = "[LOCAL] " + document.title;
+    }
+</script>
+
+</body>
+
+</html>
